@@ -10,6 +10,8 @@ I'm going to explain how to deploy hyperledger fabric on Docker swarm in this re
  - Download and Extract artifacts and binaries
    cd /nfs-share
    curl -sSL https://goo.gl/NIKLiU | bash
+ - port already used....
+   https://github.com/moby/moby/issues/31249
 
 ## 1. Install Docker >= 1.13
 
