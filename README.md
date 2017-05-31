@@ -66,3 +66,6 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
     ```
     $ docker stack deploy -c hyperledger-swarm.yaml hyperledger
     ```
+
+### Do the rest of 'Getting Started[https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html]' of Hyperledger Fabric Documentation
+* Create & Join channel, Install, Instantiate & Query chaincodes
