@@ -69,3 +69,4 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 
 ### Do the rest of [Getting Started of Hyperledger Fabric Documentation](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)
 * Create & Join channel, Install, Instantiate & Query chaincodes
+ - remove tls & cafile options per each command. (Those are not necessary because TLS is disabled ;)
