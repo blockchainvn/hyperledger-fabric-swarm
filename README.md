@@ -33,7 +33,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   - on master host,
   ```
   docker swarm init
-  ```
+  ```https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html
   - You can see like below,
   ```
   Swarm initialized: current node (dxn1zf6l61qsb1josjja83ngz) is now a manager.
@@ -67,5 +67,5 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
     $ docker stack deploy -c hyperledger-swarm.yaml hyperledger
     ```
 
-### Do the rest of 'Getting Started(https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)' of Hyperledger Fabric Documentation
+### Do the rest of [Getting Started of Hyperledger Fabric Documentation](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)
 * Create & Join channel, Install, Instantiate & Query chaincodes
