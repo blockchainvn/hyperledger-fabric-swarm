@@ -60,4 +60,9 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
     $ docker network create --attachable --driver overlay --subnet=10.200.1.0/24 hyperledger-ov
     ```
 ### Deploy Hyperledger nodes
-* Get 
+* Get 'hyperledger-swarm.yaml' file
+* Deploy on Swarm with that file
+  - on Master host,
+    ```
+    $ docker stack deploy -c hyperledger-swarm.yaml hyperledger
+    ```
