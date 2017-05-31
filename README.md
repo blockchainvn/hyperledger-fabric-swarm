@@ -1,25 +1,23 @@
 # hyperledger_on_swarm
----
 
-I'm going to explain how to deploy hyperledger fabric on Docker swarm in this respository.
-## 0. Pre-reqs
- - 3 physical or virtual machines
-   : 1 NFS server + 2 NFS client
-   https://www.howtoforge.com/tutorial/setting-up-an-nfs-server-and-client-on-centos-7/
-     NFS is mounted on /nfs-share
- - Download and Extract artifacts and binaries
-   cd /nfs-share
-   curl -sSL https://goo.gl/NIKLiU | bash
- - port already used....
-   https://github.com/moby/moby/issues/31249
+This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 
-## 1. Install Docker >= 1.13
+## Limitation
+- This works WITHOUT TLS only.
+  Whenever enable TLS, grpc error code 14 occurs.
 
-https://docs.docker.com/cs-engine/1.13/#install-on-centos-7172--rhel-70717273-yum-based-systems
+## 1. Pre-reqs
+- 2 or more machines
+- Install Docker >= 1.13
 
-systemctl start docker && systemctl enable docker
-
-## 2. Generate the artifacts
+## 2. Get Hyperledger Fabric artifacts and binaries
+- As all containers share same cryption keys and artifacts, you need to put them on same location.
+  In this case, the location is '/nfs-share' (I personally use NFS)
+  For example, :
+    cd /nfs-share
+    curl -sSL https://goo.go/NIKLiU | bash
+    
+## 3. Generate the artifacts
 
 ## 3. 
 TBC.....
