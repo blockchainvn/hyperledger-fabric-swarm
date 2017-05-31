@@ -6,18 +6,21 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 - This works WITHOUT TLS only.
   Whenever enable TLS, grpc error code 14 occurs.
 
-## 1. Pre-reqs
+### Pre-reqs
 - 2 or more machines
 - Install Docker >= 1.13
 
-## 2. Get Hyperledger Fabric artifacts and binaries
-- As all containers share same cryption keys and artifacts, you need to put them on same location.
-  In this case, the location is '/nfs-share' (I personally use NFS)
-  For example, :
+### Get Hyperledger Fabric artifacts and binaries
+* As all containers share same cryption keys and artifacts, you need to put them on same location.
+   - In this case, the location is '/nfs-share' (I personally use NFS)
+   - For example,
+   ```
     cd /nfs-share
     curl -sSL https://goo.go/NIKLiU | bash
+    ```
     
-## 3. Generate the artifacts
+### Generate the artifacts
+
 
 ## 3. 
 TBC.....
