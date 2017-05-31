@@ -2,11 +2,12 @@ version: '3'
 #
 networks:
   hyperledger-ov:
-    driver: overlay
-#    external: true
-    ipam:
-      config:
-        - subnet: 10.200.1.0/24
+    external:
+      name: hyperledger-ov
+#    driver: overlay
+#    ipam:
+#      config:
+#        - subnet: 10.200.1.0/24
 
 services:
 #  ca0:
@@ -59,7 +60,7 @@ services:
 #      - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org2.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
 #    #container_name: ca_peerOrg2
 
-  orderer_example_com:
+  orderer:
     deploy:
       placement:
         constraints:
@@ -73,7 +74,9 @@ services:
     hostname: orderer.example.com
     image: hyperledger/fabric-orderer:x86_64-1.0.0-alpha2
     networks:
-      - hyperledger-ov
+      hyperledger-ov:
+        aliases:
+          - orderer.example.com
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -82,7 +85,7 @@ services:
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       # enabled TLS
-      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_ENABLED=false
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
       - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
@@ -97,7 +100,7 @@ services:
 #    ports:
 #      - "7050:7050"
 
-  peer0_org1_example_com:
+  peer0_org1:
     deploy:
       replicas: 1
       restart_policy:
@@ -108,7 +111,9 @@ services:
     hostname: peer0.org1.example.com
     image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
     networks:
-      - hyperledger-ov
+      hyperledger-ov:
+        aliases:
+          - peer0.org1.example.com
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
@@ -117,7 +122,7 @@ services:
       #- CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=linuxamd64_default
       #- CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_ENABLED=false
       - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
@@ -129,8 +134,8 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       - CORE_PEER_ID=peer0.org1.example.com
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
+      - CORE_PEER_ADDRESS=peer0_org1:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_org1:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
@@ -144,7 +149,7 @@ services:
 #      - "7051:7051"
 #      - "7053:7053"
 
-  peer1_org1_example_com:
+  peer1_org1:
     deploy:
       replicas: 1
       restart_policy:
@@ -155,7 +160,9 @@ services:
     hostname: peer1.org1.example.com
     image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
     networks:
-      - hyperledger-ov
+      hyperledger-ov:
+        aliases:
+          - peer1.org1.example.com
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
@@ -164,7 +171,7 @@ services:
       #- CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=linuxamd64_default
       #- CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_ENABLED=false
       - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
@@ -176,9 +183,9 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       - CORE_PEER_ID=peer1.org1.example.com
-      - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
+      - CORE_PEER_ADDRESS=peer1_org1:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1_org1:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_org1:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
@@ -192,7 +199,7 @@ services:
 #      - "8051:7051"
 #      - "8053:7053"
 
-  peer0_org2_example_com:
+  peer0_org2:
     deploy:
       replicas: 1
       restart_policy:
@@ -203,7 +210,9 @@ services:
     hostname: peer0.org2.example.com
     image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
     networks:
-      - hyperledger-ov
+      hyperledger-ov:
+        aliases:
+          - peer0.org2.example.com
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
@@ -212,7 +221,7 @@ services:
       #- CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=linuxamd64_default
       #- CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_ENABLED=false
       - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
@@ -224,9 +233,9 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       - CORE_PEER_ID=peer0.org2.example.com
-      - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org2.example.com:7051
+      - CORE_PEER_ADDRESS=peer0_org2:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_org2:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_org2:7051
       - CORE_PEER_LOCALMSPID=Org2MSP
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
@@ -240,7 +249,7 @@ services:
 #      - "9051:7051"
 #      - "9053:7053"
 
-  peer1_org2_example_com:
+  peer1_org2:
     deploy:
       replicas: 1
       restart_policy:
@@ -251,7 +260,9 @@ services:
     hostname: peer1.org2.example.com
     image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
     networks:
-      - hyperledger-ov
+      hyperledger-ov:
+        aliases:
+          - peer1.org2.example.com
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
@@ -260,7 +271,7 @@ services:
       #- CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=linuxamd64_default
       #- CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_ENABLED=false
       - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
@@ -272,9 +283,9 @@ services:
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
       - CORE_PEER_ID=peer1.org2.example.com
-      - CORE_PEER_ADDRESS=peer1.org2.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org2.example.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org2.example.com:7051
+      - CORE_PEER_ADDRESS=peer1_org2:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1_org2:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1_org2:7051
       - CORE_PEER_LOCALMSPID=Org2MSP
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
@@ -299,7 +310,9 @@ services:
         delay: 5s
         max_attempts: 3
     networks:
-      - hyperledger-ov
+      hyperledger-ov:
+        aliases:
+          - cli
     #container_name: cli
     hostname: cli
     image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
@@ -309,9 +322,9 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+      - CORE_PEER_ADDRESS=peer0_org1:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
-      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_ENABLED=false
       - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
       - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
