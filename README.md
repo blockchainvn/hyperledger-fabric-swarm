@@ -45,7 +45,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
     192.168.99.100:2377
  
   To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
-   ```
+  ```
    - Use last command to join worker host to Swarm cluster
      On worker hosts,
     ```
