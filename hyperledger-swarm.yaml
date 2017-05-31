@@ -87,6 +87,22 @@ services:
         - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
         - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
 
+  couchdb0:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: couchdb0
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
+    networks:
+      - hyperledger-ov
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "5984:5984"
+
   peer0_org1:
     deploy:
       replicas: 1
@@ -118,12 +134,32 @@ services:
       - CORE_PEER_LOCALMSPID=Org1MSP
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start --peer-defaultchain=false
     volumes:
         - /var/run/:/host/var/run/
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+    depends_on:
+      - couchdb0
+
+  couchdb1:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: couchdb1
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
+    networks:
+      - hyperledger-ov
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "6984:5984"
 
   peer1_org1:
     deploy:
@@ -132,7 +168,6 @@ services:
         condition: on-failure
         delay: 5s
         max_attempts: 3
-    #container_name: peer1-org1
     hostname: peer1.org1.example.com
     image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
     networks:
@@ -165,15 +200,32 @@ services:
       - CORE_PEER_LOCALMSPID=Org1MSP
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start --peer-defaultchain=false
     volumes:
         - /var/run/:/host/var/run/
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
-#    ports:
-#      - "8051:7051"
-#      - "8053:7053"
+    depends_on:
+      - couchdb1
+
+  couchdb2:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: couchdb2
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
+    networks:
+      - hyperledger-ov
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "7984:5984"
 
   peer0_org2:
     deploy:
@@ -215,15 +267,32 @@ services:
       - CORE_PEER_LOCALMSPID=Org2MSP
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start --peer-defaultchain=false
     volumes:
         - /var/run/:/host/var/run/
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls:/etc/hyperledger/fabric/tls
-#    ports:
-#      - "9051:7051"
-#      - "9053:7053"
+    depends_on:
+      - couchdb2
+
+  couchdb3:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: couchdb3
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
+    networks:
+      - hyperledger-ov
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for example map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "8984:5984"
 
   peer1_org2:
     deploy:
@@ -265,15 +334,16 @@ services:
       - CORE_PEER_LOCALMSPID=Org2MSP
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start --peer-defaultchain=false
     volumes:
         - /var/run/:/host/var/run/
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/tls:/etc/hyperledger/fabric/tls
-#    ports:
-#      - "10051:7051"
-#      - "10053:7053"
+    depends_on:
+      - couchdb3
 
   cli:
     deploy:
@@ -316,6 +386,28 @@ services:
         - /nfs-share/release/linux-amd64/crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - /nfs-share/release/linux-amd64/scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - /nfs-share/release/linux-amd64/channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer
+      - peer0_org1
+      - peer0_org2
+      - peer1_org1
+      - peer1_org2
+
+  busybox:
+    deploy:
+      placement:
+        constraints:
+          - node.role != manager
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    networks:
+        - hyperledger-ov
+    hostname: busybox
+    image: busybox
+    command: sleep 3600
     depends_on:
       - orderer
       - peer0_org1
