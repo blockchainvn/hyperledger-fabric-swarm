@@ -3,8 +3,8 @@
 This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 
 ## Limitation
-<del>* This works WITHOUT TLS only.</del>
-  <del>- Whenever enable TLS, grpc error code 14 occurs.</del> (seems it works with TLS..)
+* <del>This works WITHOUT TLS only.</del>
+  - <del>Whenever enable TLS, grpc error code 14 occurs.</del> (seems it works with TLS..)
 * Kafka, Zookeeper has not been tested.
 
 ### Pre-reqs
