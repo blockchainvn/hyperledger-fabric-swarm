@@ -3,31 +3,14 @@
 This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 
 ## Limitation
-* This works WITHOUT TLS only.
-  - Whenever enable TLS, grpc error code 14 occurs.
-* CA, CouchDB, Kafka, Zookeeper has not been tested.
+<del>* This works WITHOUT TLS only.</del>
+  <del>- Whenever enable TLS, grpc error code 14 occurs.</del> (seems it works with TLS..)
+* Kafka, Zookeeper has not been tested.
 
 ### Pre-reqs
 - 2 or more machines with Linux
 - Install Docker >= 1.13
 
-### Get Hyperledger Fabric artifacts and binaries
-* As all containers share same cryption keys and artifacts, you need to put them on same location.
-   - In this case, the location is '/nfs-share' (I personally use NFS)
-   - For example,
-   ```
-    cd /nfs-share
-    curl -sSL https://goo.go/NIKLiU | bash
-    ```
-    - You need to change YAML file if you use other path.
-    
-### Generate the artifacts
-* Generate crypto keys and Create orderer genesis block, transaction artifacts
-  ```
-  cd release/linux-amd64
-  ./generateArtifacts.sh <channel-ID>
-  ```
-  
 ### Create Docker Swarm cluster
 * Create one or more master hosts and other worker hosts
   - Open ports for Swarm. On ALL hosts, (eg, CentOS)
@@ -66,9 +49,30 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
     ```
     $ docker network create --attachable --driver overlay --subnet=10.200.1.0/24 hyperledger-ov
     ```
+### Get Hyperledger Fabric artifacts and binaries
+* As all containers share same cryption keys and artifacts, you need to put them on same location.
+   - In this case, the location is '/nfs-share' (I personally use NFS)
+   - For example,
+   ```
+    cd /nfs-share
+    curl -sSL https://goo.go/NIKLiU | bash
+    ```
+    - You need to change YAML file if you use other path.
+    
+### Generate the artifacts
+* clone this git
+  ```
+  cd release/linux-amd64
+  git clone https://github.com/ChoiSD/hyperledger_on_swarm.git
+  cp hyperledger_on_swarm/* .
+  ```
+* generate artifacts
+  ```
+  ./generateArtifacts-swarm.sh <CHANNEL-NAME>
+  ```
+
 ### Deploy Hyperledger nodes
-* Get 'hyperledger-swarm.yaml' file
-* Deploy on Swarm with that file
+* Deploy on Swarm with hyperledger-swarm.yaml file
   - on Master host,
     ```
     $ docker stack deploy -c hyperledger-swarm.yaml hyperledger
@@ -76,4 +80,3 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 
 ### Do the rest of [Getting Started of Hyperledger Fabric Documentation](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)
 * Create & Join channel, Install, Instantiate & Query chaincodes
- - remove tls & cafile options per each command. (Those are not necessary because TLS is disabled ;)
