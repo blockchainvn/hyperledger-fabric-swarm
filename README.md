@@ -18,6 +18,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   firewall-cmd --permanent --zone=public --add-port=2377/tcp --add-port=7946/tcp --add-port=7946/udp --add-port=4789/udp
   firewall-cmd --reload
   ```
+    - I think opening swarm ports only is sufficient because all nodes communicates thru overlay network.
   
   - on master host,
   ```
