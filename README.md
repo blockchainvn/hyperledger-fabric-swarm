@@ -30,6 +30,12 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   
 ### Create Docker Swarm cluster
 * Create one or more master hosts and other worker hosts
+  - Open ports for Swarm. On ALL hosts, (eg, CentOS)
+  ```
+  firewall-cmd --permanent --zone=public --add-port=2377/tcp --add-port=7946/tcp --add-port=7946/udp --add-port=4789/udp
+  firewall-cmd --reload
+  ```
+  
   - on master host,
   ```
   docker swarm init
