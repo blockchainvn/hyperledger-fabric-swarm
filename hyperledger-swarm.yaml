@@ -74,7 +74,7 @@ services:
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       # Disable TLS because of connection error (grpc error 14)
-      - ORDERER_GENERAL_TLS_ENABLED=false
+      - ORDERER_GENERAL_TLS_ENABLED=true
       - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
       - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
       - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
@@ -98,10 +98,6 @@ services:
     image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
     networks:
       - hyperledger-ov
-    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
-    # for example map it to utilize Fauxton User Interface in dev environments.
-    ports:
-      - "5984:5984"
 
   peer0_org1:
     deploy:
@@ -119,7 +115,7 @@ services:
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
@@ -156,10 +152,6 @@ services:
     image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
     networks:
       - hyperledger-ov
-    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
-    # for example map it to utilize Fauxton User Interface in dev environments.
-    ports:
-      - "6984:5984"
 
   peer1_org1:
     deploy:
@@ -182,7 +174,7 @@ services:
       #- CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=linuxamd64_default
       #- CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
@@ -222,10 +214,6 @@ services:
     image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
     networks:
       - hyperledger-ov
-    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
-    # for example map it to utilize Fauxton User Interface in dev environments.
-    ports:
-      - "7984:5984"
 
   peer0_org2:
     deploy:
@@ -249,7 +237,7 @@ services:
       #- CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=linuxamd64_default
       #- CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
@@ -289,10 +277,6 @@ services:
     image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
     networks:
       - hyperledger-ov
-    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
-    # for example map it to utilize Fauxton User Interface in dev environments.
-    ports:
-      - "8984:5984"
 
   peer1_org2:
     deploy:
@@ -316,7 +300,7 @@ services:
       #- CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=linuxamd64_default
       #- CORE_LOGGING_LEVEL=ERROR
       - CORE_LOGGING_LEVEL=DEBUG
-      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_GOSSIP_USELEADERELECTION=true
       - CORE_PEER_GOSSIP_ORGLEADER=false
@@ -370,7 +354,7 @@ services:
       - CORE_PEER_ID=cli
       - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
       - CORE_PEER_LOCALMSPID=Org1MSP
-      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
       - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
       - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
