@@ -65,7 +65,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   ```
   cd release/linux-amd64
   git clone https://github.com/ChoiSD/hyperledger_on_swarm.git
-  cp hyperledger_on_swarm/* .
+  cp hyperledger_on_swarm/* ..
   ```
 * generate artifacts
   ```
