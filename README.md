@@ -62,7 +62,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
    - For example,
    ```
     cd /nfs-share
-    curl -sSL https://goo.go/NIKLiU | bash
+    curl -sSL https://goo.gl/NIKLiU | bash
     ```
     - You need to change YAML file if you use other path.
     
