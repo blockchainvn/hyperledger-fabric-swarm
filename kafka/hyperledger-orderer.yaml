@@ -1,0 +1,114 @@
+version: '3'
+
+networks:
+  hyperledger-ov:
+    # If network is created with deplyment, Chaincode container cannot connect to network
+    external:
+      name: hyperledger-ov
+
+services:
+  # Put all services with restart option on failure
+  orderer0:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: orderer0.example.com
+    image: hyperledger/fabric-orderer:x86_64-1.0.0-alpha2
+    # Give network alias
+    networks:
+      hyperledger-ov:
+        aliases:
+          - orderer0.example.com
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - ORDERER_KAFKA_VERBOSE=true
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+        - /nfs-share/release/linux-amd64/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp:/var/hyperledger/orderer/msp
+        - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/:/var/hyperledger/orderer/tls
+
+  orderer1:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: orderer1.example.com
+    image: hyperledger/fabric-orderer:x86_64-1.0.0-alpha2
+    # Give network alias
+    networks:
+      hyperledger-ov:
+        aliases:
+          - orderer1.example.com
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - ORDERER_KAFKA_VERBOSE=true
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+        - /nfs-share/release/linux-amd64/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
+        - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
+
+  orderer2:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: orderer2.example.com
+    image: hyperledger/fabric-orderer:x86_64-1.0.0-alpha2
+    # Give network alias
+    networks:
+      hyperledger-ov:
+        aliases:
+          - orderer2.example.com
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - ORDERER_KAFKA_VERBOSE=true
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+        - /nfs-share/release/linux-amd64/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/msp:/var/hyperledger/orderer/msp
+        - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/example.com/orderers/orderer2.example.com/tls/:/var/hyperledger/orderer/tls

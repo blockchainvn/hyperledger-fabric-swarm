@@ -1,0 +1,24 @@
+version: '3'
+#
+networks:
+  hyperledger-ov:
+    # If network is created with deplyment, Chaincode container cannot connect to network
+    external:
+      name: hyperledger-ov
+
+services:
+  busybox:
+    deploy:
+      placement:
+        constraints:
+          - node.role != manager
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    networks:
+        - hyperledger-ov
+    hostname: busybox
+    image: busybox
+    command: sleep 3600
