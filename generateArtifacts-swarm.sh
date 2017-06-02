@@ -30,14 +30,14 @@ function replacePrivateKey () {
         cd $CURRENT_DIR
         #echo "sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml"
         #sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
-				#### Just change docker-compose-e2e.yaml to hyperledger-swarm.yaml ####
-				echo "sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm"
+	#### Just change docker-compose-e2e.yaml to hyperledger-swarm.yaml ####
+	echo "sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm"
         sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm.yaml
         cd crypto-config/peerOrganizations/org2.example.com/ca/
         PRIV_KEY=$(ls *_sk)
         cd $CURRENT_DIR
         #sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
-				sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm.yaml
+	sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm.yaml
 }
 
 ## Generates Org certs using cryptogen tool
