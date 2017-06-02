@@ -3,10 +3,16 @@
 This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 
 ## Limitation
-* <del>This works WITHOUT TLS only.</del>
-  - <del>Whenever enable TLS, grpc error code 14 occurs.</del> (seems it works with TLS..)
-* Kafka, Zookeeper has not been tested.
+* ~~This works WITHOUT TLS only.~~
+  - ~~Whenever enable TLS, grpc error code 14 occurs.~~ (seems it works with TLS..)
+* ~~Kafka, Zookeeper has not been tested.~~ (Kafka & Zookeeper are also tested)
 
+
+## Instructions
+* There are two versions
+  - solo : 2 CAs, 4 peers, 4 CouchDBs, 1 orderer
+  - kafka : 2 CAs, 4 peers, 4 CouchDBs, 3 orderers, 3 kafkas, 3 zookeepers
+  
 ### Pre-reqs
 - 2 or more machines with Linux
 - Install Docker >= 1.13
@@ -38,17 +44,17 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
   ```
    - Use last command to join worker host to Swarm cluster
-     On worker hosts,
+     eg, on worker hosts,
     ```
-     docker swarm join \
-    --token SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c \
-    192.168.99.100:2377
+    docker swarm join \
+      --token SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c \
+      192.168.99.100:2377
     ```
 ### Create overlay network
 * Create overlay network which will be used as path between hyperledger nodes
   - on Master host,
     ```
-    $ docker network create --attachable --driver overlay --subnet=10.200.1.0/24 hyperledger-ov
+    docker network create --attachable --driver overlay --subnet=10.200.1.0/24 hyperledger-ov
     ```
 ### Get Hyperledger Fabric artifacts and binaries
 * As all containers share same cryption keys and artifacts, you need to put them on same location.
@@ -65,18 +71,37 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   ```
   cd release/linux-amd64
   git clone https://github.com/ChoiSD/hyperledger_on_swarm.git
-  cp hyperledger_on_swarm/* .
+  cp hyperledger_on_swarm/generateArtifacts-swarm.sh $PWD
   ```
+  - If you choose to deploy solo version,
+    ```
+    cp hyperledger_on_swarm/solo/* $PWD
+    ```
+  - If choose to deploy kafka version,
+    ```
+    cp hyperledger_on_swarm/kafka/* $PWD
+    ```
 * generate artifacts
   ```
   ./generateArtifacts-swarm.sh <CHANNEL-NAME>
   ```
 
 ### Deploy Hyperledger nodes
-* Deploy on Swarm with hyperledger-swarm.yaml file
-  - on Master host,
+* On Master host,
+  - If you choose to deploy solo version,
     ```
-    $ docker stack deploy -c hyperledger-swarm.yaml hyperledger
+    docker stack deploy -c hyperledger-swarm.yaml hyperledger
+    ```
+  - If you choose to deploy kafka version,
+    ```
+    docker stack deploy -c hyperledger-zk.yaml hyperledger-zk
+    docker stack deploy -c hyperledger-kafka.yaml hyperledger-kafka
+    docker stack deploy -c hyperledger-orderer.yaml hyperledger-orderer
+    docker stack deploy -c hyperledger-swarm.yaml hyperledger
+    ```
+  - In case you want to check if network is OK or ports are opened on containers, you can use busybox. busybox has ping, telnet, etc. 
+    ```
+    docker stack deploy -c busybox.yaml busybox
     ```
 
 ### Do the rest of [Getting Started of Hyperledger Fabric Documentation](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)
