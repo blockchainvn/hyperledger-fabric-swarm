@@ -17,7 +17,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 - 2 or more machines with Linux
 - Install Docker >= 1.13
 
-### Create Docker Swarm cluster
+### [Create Docker Swarm cluster](https://docs.docker.com/engine/swarm/swarm-tutorial/)
 * Create one or more master hosts and other worker hosts
   - Open ports for Swarm. On ALL hosts, (eg, CentOS)
   ```
