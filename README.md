@@ -108,6 +108,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 * Create & Join channel, Install, Instantiate & Query chaincodes
   - You need to **locate fabric-ccenv image on the same machine with peer** you control thru cli. Or you would see error message like below:
   ```
-  2017-06-08 09:35:15.281 UTC [msp/identity] Sign -> DEBU 009 Sign: digest: 3A8D433372110C54398F3585524F82F67C0B721EF08B667DD864D4ADBDF88A3B
-Error: Error endorsing chaincode: rpc error: code = 2 desc = Error starting container: Failed to generate platform-specific docker build: Error creating container: no such image
-```
+  2017-06-08 09:35:15.281 UTC [msp/identity] Sign -> DEBU 009 Sign: digest:      
+  3A8D433372110C54398F3585524F82F67C0B721EF08B667DD864D4ADBDF88A3B
+  Error: Error endorsing chaincode: rpc error: code = 2 desc = Error starting container: Failed to generate platform-specific docker build: Error creating container: no such image
+  ```
