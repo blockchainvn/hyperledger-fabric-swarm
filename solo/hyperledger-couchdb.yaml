@@ -1,0 +1,54 @@
+version: '3'
+
+networks:
+  hyperledger-ov:
+    # If network is created with deplyment, Chaincode container cannot connect to network
+    # as the created network name is '<STACK NAME>_hyperledger-ov'.
+    # But chaincode container will attempt to connect 'hyperledger-ov' network
+    external:
+      name: hyperledger-ov
+
+services:
+  couchdb0:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-beta
+    networks:
+      - hyperledger-ov
+
+  couchdb1:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-beta
+    networks:
+      - hyperledger-ov
+
+  couchdb2:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-beta
+    networks:
+      - hyperledger-ov
+
+  couchdb3:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-beta
+    networks:
+      - hyperledger-ov
