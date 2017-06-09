@@ -65,6 +65,11 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
     curl -sSL https://goo.gl/NIKLiU | bash
     ```
     - You need to change YAML file if you use other path.
+    - I hope you pull ccenv image on all host. Fabric cannot pull the latest ccenv image for you.
+      so on All host,
+    ```
+    docker pull hyperledger/fabric-ccenv:x86_64-1.0.0-beta
+    ```
     
 ### Generate the artifacts
 * clone this git
@@ -90,6 +95,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 * On Master host,
   - If you choose to deploy solo version,
     ```
+    docker stack deploy -c hyperledger-couchdb.yaml hyperledger-couchdb
     docker stack deploy -c hyperledger-swarm.yaml hyperledger
     ```
   - If you choose to deploy kafka version,
