@@ -96,6 +96,8 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   - If you choose to deploy solo version,
     ```
     docker stack deploy -c hyperledger-couchdb.yaml hyperledger-couchdb
+    ## Wait until couchdbs are all up.
+    ## This will take some time as docker will pull couchdb images from registry.
     docker stack deploy -c hyperledger-swarm.yaml hyperledger
     ```
   - If you choose to deploy kafka version,
