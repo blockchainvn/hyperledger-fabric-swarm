@@ -97,7 +97,7 @@ services:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: peer node start --peer-defaultchain=false
+    command: peer node start
     volumes:
         - /var/run/:/host/var/run/
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
@@ -157,7 +157,7 @@ services:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: peer node start --peer-defaultchain=false
+    command: peer node start
     volumes:
         - /var/run/:/host/var/run/
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
@@ -218,7 +218,7 @@ services:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: peer node start --peer-defaultchain=false
+    command: peer node start
     volumes:
         - /var/run/:/host/var/run/
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/fabric/msp
@@ -278,7 +278,7 @@ services:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: peer node start --peer-defaultchain=false
+    command: peer node start
     volumes:
         - /var/run/:/host/var/run/
         - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/msp:/etc/hyperledger/fabric/msp
