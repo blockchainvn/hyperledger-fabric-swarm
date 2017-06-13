@@ -8,7 +8,7 @@ networks:
 
 services:
   ca0:
-    image: hyperledger/fabric-ca:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-ca:x86_64-1.0.0-beta
     networks:
       hyperledger-ov:
         aliases:
@@ -30,7 +30,7 @@ services:
       - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
 
   ca1:
-    image: hyperledger/fabric-ca:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-ca:x86_64-1.0.0-beta
     networks:
       hyperledger-ov:
         aliases:
@@ -59,7 +59,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: couchdb0
-    image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-beta
     networks:
       - hyperledger-ov
 
@@ -71,7 +71,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: peer0.org1.example.com
-    image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-peer:x86_64-1.0.0-beta
     networks:
       hyperledger-ov:
         aliases:
@@ -111,7 +111,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: couchdb1
-    image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-beta
     networks:
       - hyperledger-ov
 
@@ -123,7 +123,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: peer1.org1.example.com
-    image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-peer:x86_64-1.0.0-beta
     networks:
       hyperledger-ov:
         aliases:
@@ -171,7 +171,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: couchdb2
-    image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-beta
     networks:
       - hyperledger-ov
 
@@ -184,7 +184,7 @@ services:
         max_attempts: 3
     #container_name: peer0-org2
     hostname: peer0.org2.example.com
-    image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-peer:x86_64-1.0.0-beta
     networks:
       hyperledger-ov:
         aliases:
@@ -232,7 +232,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: couchdb3
-    image: hyperledger/fabric-couchdb:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0-beta
     networks:
       - hyperledger-ov
 
@@ -244,7 +244,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: peer1.org2.example.com
-    image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-peer:x86_64-1.0.0-beta
     networks:
       hyperledger-ov:
         aliases:
@@ -297,7 +297,7 @@ services:
     networks:
       - hyperledger-ov
     hostname: cli
-    image: hyperledger/fabric-peer:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-tools:x86_64-1.0.0-beta
     tty: true
     environment:
       - GOPATH=/opt/gopath
@@ -318,7 +318,7 @@ services:
     command: sleep 10000000
     volumes:
         - /var/run/:/host/var/run/
-        - /nfs-share/release/chaincode/go/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+        - /nfs-share/release/linux-amd64/chaincode/go/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
         - /nfs-share/release/linux-amd64/crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - /nfs-share/release/linux-amd64/scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - /nfs-share/release/linux-amd64/channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts

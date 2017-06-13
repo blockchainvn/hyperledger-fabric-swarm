@@ -15,7 +15,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: zookeeper0.example.com
-    image: hyperledger/fabric-zookeeper:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-zookeeper:x86_64-1.0.0-beta
     # Give network alias
     networks:
       - hyperledger-ov
@@ -32,7 +32,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: zookeeper1.example.com
-    image: hyperledger/fabric-zookeeper:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-zookeeper:x86_64-1.0.0-beta
     # Give network alias
     networks:
       - hyperledger-ov
@@ -49,7 +49,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: zookeeper2.example.com
-    image: hyperledger/fabric-zookeeper:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-zookeeper:x86_64-1.0.0-beta
     # Give network alias
     networks:
       - hyperledger-ov

@@ -16,7 +16,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: orderer0.example.com
-    image: hyperledger/fabric-orderer:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-orderer:x86_64-1.0.0-beta
     # Give network alias
     networks:
       hyperledger-ov:
@@ -35,6 +35,8 @@ services:
       - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - ORDERER_KAFKA_RETRY_SHORTINTERVAL=1s
+      - ORDERER_KAFAK_RETRY_SHORTTOTAL=30s
       - ORDERER_KAFKA_VERBOSE=true
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
@@ -51,7 +53,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: orderer1.example.com
-    image: hyperledger/fabric-orderer:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-orderer:x86_64-1.0.0-beta
     # Give network alias
     networks:
       hyperledger-ov:
@@ -70,6 +72,8 @@ services:
       - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - ORDERER_KAFKA_RETRY_SHORTINTERVAL=1s
+      - ORDERER_KAFAK_RETRY_SHORTTOTAL=30s
       - ORDERER_KAFKA_VERBOSE=true
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
@@ -86,7 +90,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: orderer2.example.com
-    image: hyperledger/fabric-orderer:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-orderer:x86_64-1.0.0-beta
     # Give network alias
     networks:
       hyperledger-ov:
@@ -105,6 +109,8 @@ services:
       - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+      - ORDERER_KAFKA_RETRY_SHORTINTERVAL=1s
+      - ORDERER_KAFAK_RETRY_SHORTTOTAL=30s
       - ORDERER_KAFKA_VERBOSE=true
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer

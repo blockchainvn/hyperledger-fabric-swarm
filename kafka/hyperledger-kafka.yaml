@@ -15,7 +15,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: kafka0.example.com
-    image: hyperledger/fabric-kafka:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-kafka:x86_64-1.0.0-beta
     # Give network alias
     networks:
       hyperledger-ov:
@@ -104,7 +104,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: kafka1.example.com
-    image: hyperledger/fabric-kafka:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-kafka:x86_64-1.0.0-beta
     # Give network alias
     networks:
       hyperledger-ov:
@@ -128,7 +128,7 @@ services:
         delay: 5s
         max_attempts: 3
     hostname: kafka2.example.com
-    image: hyperledger/fabric-kafka:x86_64-1.0.0-alpha2
+    image: hyperledger/fabric-kafka:x86_64-1.0.0-beta
     # Give network alias
     networks:
       hyperledger-ov:

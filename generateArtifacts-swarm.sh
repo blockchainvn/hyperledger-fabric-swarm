@@ -1,4 +1,10 @@
 #!/bin/bash +x
+#
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
 
 #set -e
 
@@ -22,22 +28,18 @@ function replacePrivateKey () {
 	fi
 
 	#cp docker-compose-e2e-template.yaml docker-compose-e2e.yaml
-	cp hyperledger-swarm-template.yaml hyperledger-swarm.yaml
-
+  cp hyperledger-swarm-template.yaml hyperledger-swarm.yaml
         CURRENT_DIR=$PWD
         cd crypto-config/peerOrganizations/org1.example.com/ca/
         PRIV_KEY=$(ls *_sk)
         cd $CURRENT_DIR
-        #echo "sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml"
         #sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
-	#### Just change docker-compose-e2e.yaml to hyperledger-swarm.yaml ####
-	echo "sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm"
-        sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm.yaml
+				sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm.yaml
         cd crypto-config/peerOrganizations/org2.example.com/ca/
         PRIV_KEY=$(ls *_sk)
         cd $CURRENT_DIR
         #sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
-	sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm.yaml
+				sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm.yaml
 }
 
 ## Generates Org certs using cryptogen tool
@@ -48,7 +50,7 @@ function generateCerts (){
             echo "Using cryptogen -> $CRYPTOGEN"
 	else
 	    echo "Building cryptogen"
-	    make -C $FABRIC_ROOT release-all
+	    make -C $FABRIC_ROOT release
 	fi
 
 	echo
@@ -67,7 +69,7 @@ function generateChannelArtifacts() {
             echo "Using configtxgen -> $CONFIGTXGEN"
 	else
 	    echo "Building configtxgen"
-	    make -C $FABRIC_ROOT release-all
+	    make -C $FABRIC_ROOT release
 	fi
 
 	echo "##########################################################"
@@ -75,7 +77,6 @@ function generateChannelArtifacts() {
 	echo "##########################################################"
 	# Note: For some unknown reason (at least for now) the block file can't be
 	# named orderer.genesis.block or the orderer will fail to launch!
-	mkdir $FABRIC_ROOT/release/$OS_ARCH/channel-artifacts
 	$CONFIGTXGEN -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
 
 	echo
