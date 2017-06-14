@@ -37,15 +37,16 @@ type ServNet struct {
 	Aliases 			[]string 							`yaml:"aliases"`
 }
 
+// Placement will be added future
 type Deploy struct {
   Replicas      int                   `yaml:"replicas"`
-  Placement     *Placement            `yaml:"placement"`
+  //Placement     *Placement            `yaml:"placement"`
   RestartPolicy *RestartPolicy        `yaml:"restart_policy"`
 }
 
-type Placement struct {
-  Constraint    []string              `yaml:"constraints"`
-}
+//type Placement struct {
+//  Constraint    []string              `yaml:"constraints"`
+//}
 
 type RestartPolicy struct {
   Condition     string                `yaml:"condition"`
