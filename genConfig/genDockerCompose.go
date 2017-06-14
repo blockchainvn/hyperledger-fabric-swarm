@@ -9,50 +9,50 @@ import (
 	"strings"
 )
 type DockerCompose struct {
-  Version       string               `yaml:"version"`
-  Networks      map[string]*Network  `yaml:"networks"`
-  Services      map[string]*Service  `yaml:"services"`
+  Version       string               `yaml:"version,omitempty"`
+  Networks      map[string]*Network  `yaml:"networks,omitempty"`
+  Services      map[string]*Service  `yaml:"services,omitempty"`
 }
 
 type Network struct {
-  External      *External             `yaml:"external"`
+  External      *External             `yaml:"external,omitempty"`
 }
 
 type External struct {
-  Name          string                `yaml:"name"`
+  Name          string                `yaml:"name,omitempty"`
 }
 
 type Service struct {
-  Deploy        *Deploy               `yaml:"deploy"`
-  Hostname      string                `yaml:"hostname"`
-  Image         string                `yaml:"image"`
-  Networks      map[string]*ServNet   `yaml:"networks"`
-  Environment   []string              `yaml:"environment"`
-	WorkingDir 		string 								`yaml:"working_dir"`
-	Command 			string 								`yaml:"command"`
-	Volumes 			[]string 							`yaml:"volumes"`
+  Deploy        *Deploy               `yaml:"deploy,omitempty"`
+  Hostname      string                `yaml:"hostname,omitempty"`
+  Image         string                `yaml:"image,omitempty"`
+  Networks      map[string]*ServNet   `yaml:"networks,omitempty"`
+  Environment   []string              `yaml:"environment,omitempty"`
+	WorkingDir 		string 								`yaml:"working_dir,omitempty"`
+	Command 			string 								`yaml:"command,omitempty"`
+	Volumes 			[]string 							`yaml:"volumes,omitempty"`
 }
 
 type ServNet struct {
-	Aliases 			[]string 							`yaml:"aliases"`
+	Aliases 			[]string 							`yaml:"aliases,omitempty"`
 }
 
 // Placement will be added future
 type Deploy struct {
-  Replicas      int                   `yaml:"replicas"`
-  //Placement     *Placement            `yaml:"placement"`
-  RestartPolicy *RestartPolicy        `yaml:"restart_policy"`
+  Replicas      int                   `yaml:"replicas,omitempty"`
+  Placement     *Placement            `yaml:"placement,omitempty"`
+  RestartPolicy *RestartPolicy        `yaml:"restart_policy,omitempty"`
 }
 
-//type Placement struct {
-//  Constraint    []string              `yaml:"constraints"`
-//}
+type Placement struct {
+  Constraint    []string              `yaml:"constraints,omitempty"`
+}
 
 type RestartPolicy struct {
-  Condition     string                `yaml:"condition"`
-  Delay         time.Duration         `yaml:"delay"`
-  MaxAttempts   int                   `yaml:"max_attempts"`
-  Window        time.Duration         `yaml:"window"`
+  Condition     string                `yaml:"condition,omitempty"`
+  Delay         time.Duration         `yaml:"delay,omitempty"`
+  MaxAttempts   int                   `yaml:"max_attempts,omitempty"`
+  Window        time.Duration         `yaml:"window,omitempty"`
 }
 
 var TAG = `:x86_64-1.0.0-beta`
@@ -288,6 +288,7 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 			service = &Service{
 				Hostname:	hostName,
 			}
+			service.Image = "hyperledger/fabric-peer" + TAG
 			service.Networks = make(map[string]*ServNet, 1)
 			service.Networks[networkName] = &ServNet{
 				Aliases: []string{hostName},

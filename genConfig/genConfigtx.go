@@ -7,72 +7,72 @@ import (
 
 // TopLevel consists of the structs used by the configtxgen tool.
 type TopLevel struct {
-	Profiles      map[string]*Profile `yaml:"Profiles"`
-	Organizations []*Organization     `yaml:"Organizations"`
-	Application   *Application        `yaml:"Application"`
-	Orderer       *Orderer            `yaml:"Orderer"`
+	Profiles      map[string]*Profile `yaml:"Profiles,omitempty"`
+	Organizations []*Organization     `yaml:"Organizations,omitempty"`
+	Application   *Application        `yaml:"Application,omitempty"`
+	Orderer       *Orderer            `yaml:"Orderer,omitempty"`
 }
 
 // Profile encodes orderer/application configuration combinations for the configtxgen tool.
 type Profile struct {
-	Consortium  string                 `yaml:"Consortium"`
-	Application *Application           `yaml:"Application"`
-	Orderer     *Orderer               `yaml:"Orderer"`
-	Consortiums map[string]*Consortium `yaml:"Consortiums"`
+	Consortium  string                 `yaml:"Consortium,omitempty"`
+	Application *Application           `yaml:"Application,omitempty"`
+	Orderer     *Orderer               `yaml:"Orderer,omitempty"`
+	Consortiums map[string]*Consortium `yaml:"Consortiums,omitempty"`
 }
 
 // Consortium represents a group of organizations which may create channels with eachother
 type Consortium struct {
-	Organizations []*Organization `yaml:"Organizations"`
+	Organizations []*Organization      `yaml:"Organizations,omitempty"`
 }
 
 // Application encodes the application-level configuration needed in config transactions.
 type Application struct {
-	Organizations []*Organization `yaml:"Organizations"`
+	Organizations []*Organization       `yaml:"Organizations,omitempty"`
 }
 
 // Organization encodes the organization-level configuration needed in config transactions.
 type Organization struct {
-	Name           string `yaml:"Name"`
-	ID             string `yaml:"ID"`
-	MSPDir         string `yaml:"MSPDir"`
-	AdminPrincipal string `yaml:"AdminPrincipal"`
+	Name           string               `yaml:"Name,omitempty"`
+	ID             string               `yaml:"ID,omitempty"`
+	MSPDir         string               `yaml:"MSPDir,omitempty"`
+	AdminPrincipal string               `yaml:"AdminPrincipal,omitempty"`
 
 	// Note: Viper deserialization does not seem to care for
 	// embedding of types, so we use one organization struct
 	// for both orderers and applications.
-	AnchorPeers []*AnchorPeer `yaml:"AnchorPeers"`
+	AnchorPeers []*AnchorPeer           `yaml:"AnchorPeers,omitempty"`
 }
 
 // AnchorPeer encodes the necessary fields to identify an anchor peer.
 type AnchorPeer struct {
-	Host string `yaml:"Host"`
-	Port int    `yaml:"Port"`
+	Host string                         `yaml:"Host,omitempty"`
+	Port int                            `yaml:"Port,omitempty"`
 }
 
 // ApplicationOrganization ...
 // TODO This should probably be removed
 type ApplicationOrganization struct {
-	Organization `yaml:"Organization"`
+	Organization `yaml:"Organization,omitempty"`
 }
 
 // Orderer contains configuration which is used for the
 // bootstrapping of an orderer by the provisional bootstrapper.
 type Orderer struct {
-	OrdererType   string          `yaml:"OrdererType"`
-	Addresses     []string        `yaml:"Addresses"`
-	BatchTimeout  time.Duration   `yaml:"BatchTimeout"`
-	BatchSize     BatchSize       `yaml:"BatchSize"`
-	Kafka         Kafka           `yaml:"Kafka"`
-	Organizations []*Organization `yaml:"Organizations"`
-	MaxChannels   uint64          `yaml:"MaxChannels"`
+	OrdererType   string          `yaml:"OrdererType,omitempty"`
+	Addresses     []string        `yaml:"Addresses,omitempty"`
+	BatchTimeout  time.Duration   `yaml:"BatchTimeout,omitempty"`
+	BatchSize     BatchSize       `yaml:"BatchSize,omitempty"`
+	Kafka         Kafka           `yaml:"Kafka,omitempty"`
+	Organizations []*Organization `yaml:"Organizations,omitempty"`
+	MaxChannels   uint64          `yaml:"MaxChannels,omitempty"`
 }
 
 // BatchSize contains configuration affecting the size of batches.
 type BatchSize struct {
-	MaxMessageCount   uint32 `yaml:"MaxMessageCount"`
-	AbsoluteMaxBytes  uint32 `yaml:"AbsoluteMaxBytes"`
-	PreferredMaxBytes uint32 `yaml:"PreferredMaxBytes"`
+	MaxMessageCount   uint32 `yaml:"MaxMessageCount,omitempty"`
+	AbsoluteMaxBytes  uint32 `yaml:"AbsoluteMaxBytes,omitempty"`
+	PreferredMaxBytes uint32 `yaml:"PreferredMaxBytes,omitempty"`
 }
 
 // Kafka contains configuration for the Kafka-based orderer.
@@ -89,7 +89,7 @@ func GenConfigtx(domainName string, numOrgs int, numOrderer int, numKafka int) (
   orderer, _ = GenOrderer(numOrderer, domainName, kafka)
 
   var org []*Organization
-  for i := 1; i <= numOrgs; i++ {  // numOrgs
+  for i := 1; i <= numOrgs; i++ {
     temporg, _ := GenOrg(i, domainName)
     org = append(org, &temporg)
   }
@@ -164,7 +164,7 @@ func GenOrderer(numOrderer int, domainName string, kafka Kafka) (Orderer, error)
 
   var orderer Orderer
   if numOrderer == 1 {
-    address_list = append(address_list, "orderer." + domainName + ":7050")
+    address_list = append(address_list, "orderer0." + domainName + ":7050")
     orderer = Orderer{
       OrdererType:  "solo",
       Addresses:    address_list,

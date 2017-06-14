@@ -20,34 +20,34 @@ type SpecData struct {
 }
 
 type NodeTemplate struct {
-	Count    int      `yaml:"Count"`
-	Start    int      `yaml:"Start"`
-	Hostname string   `yaml:"Hostname"`
-	SANS     []string `yaml:"SANS"`
+	Count    int      `yaml:"Count,omitempty"`
+	Start    int      `yaml:"Start,omitempty"`
+	Hostname string   `yaml:"Hostname,omitempty"`
+	SANS     []string `yaml:"SANS,omitempty"`
 }
 
 type NodeSpec struct {
-	Hostname   string   `yaml:"Hostname"`
-	CommonName string   `yaml:"CommonName"`
-	SANS       []string `yaml:"SANS"`
+	Hostname   string   `yaml:"Hostname,omitempty"`
+	CommonName string   `yaml:"CommonName,omitempty"`
+	SANS       []string `yaml:"SANS,omitempty"`
 }
 
 type UsersSpec struct {
-	Count int `yaml:"Count"`
+	Count int `yaml:"Count,omitempty"`
 }
 
 type OrgSpec struct {
-	Name     string       `yaml:"Name"`
-	Domain   string       `yaml:"Domain"`
-	CA       NodeSpec     `yaml:"CA"`
-	Template NodeTemplate `yaml:"Template"`
-	Specs    []NodeSpec   `yaml:"Specs"`
-	Users    UsersSpec    `yaml:"Users"`
+	Name     string       `yaml:"Name,omitempty"`
+	Domain   string       `yaml:"Domain,omitempty"`
+	CA       NodeSpec     `yaml:"CA,omitempty"`
+	Template NodeTemplate `yaml:"Template,omitempty"`
+	Specs    []NodeSpec   `yaml:"Specs,omitempty"`
+	Users    UsersSpec    `yaml:"Users,omitempty"`
 }
 
 type Config struct {
-	OrdererOrgs []OrgSpec `yaml:"OrdererOrgs"`
-	PeerOrgs    []OrgSpec `yaml:"PeerOrgs"`
+	OrdererOrgs []OrgSpec `yaml:"OrdererOrgs,omitempty"`
+	PeerOrgs    []OrgSpec `yaml:"PeerOrgs,omitempty"`
 }
 
 func GenCrypto(domainName string, numOrgs int, numPeer int, numOrderer int) (Config, error){
@@ -84,7 +84,7 @@ func GenOrdererConfig(domainName string, numOrderers int) ([]OrgSpec, error) {
     }
   } else {
     hostname = NodeSpec{
-      Hostname: "orderer",
+      Hostname: "orderer0",
     }
     tempconfig.Specs = append(tempconfig.Specs, hostname)
   }
