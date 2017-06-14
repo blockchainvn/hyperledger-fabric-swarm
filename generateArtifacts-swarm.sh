@@ -42,7 +42,7 @@ function replacePrivateKey () {
   	PRIV_KEY=$(ls *_sk)
   	cd $CURRENT_DIR
   	#sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
-		sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-ca.yaml
+		sed $OPTS "s/CA${i}_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-ca.yaml
 		i=$(($i + 1))
 	done
 }
