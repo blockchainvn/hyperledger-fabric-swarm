@@ -273,7 +273,9 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 			}
 			service.Image = "hyperledger/fabric-couchdb" + TAG
 			service.Networks = make(map[string]*ServNet, 1)
-			service.Networks[networkName] = &ServNet{}
+			service.Networks[networkName] = &ServNet{
+				Aliases:	[]string{serviceHost},
+			}
 			err := GenDeploy(service)
 			check(err)
 
