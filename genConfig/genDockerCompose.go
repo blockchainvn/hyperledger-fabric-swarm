@@ -4,15 +4,14 @@ import (
 	"fmt"
   "time"
 	"log"
-	"gopkg.in/yaml.v2"
 
 	"strconv"
 	"strings"
 )
-type TopLevel struct {
+type DockerCompose struct {
   Version       string               `yaml:"version"`
   Networks      map[string]*Network  `yaml:"networks"`
-  Services      map[string]*Service   `yaml:"services"`
+  Services      map[string]*Service  `yaml:"services"`
 }
 
 type Network struct {
@@ -55,91 +54,79 @@ type RestartPolicy struct {
   Window        time.Duration         `yaml:"window"`
 }
 
-var net = `
-version: '3'
-#
-networks:
-  hyperledger-ov:
-    # If network is created with deplyment, Chaincode container cannot connect to network
-    external:
-      name: hyperledger-ov
-
-services:
-  zookeeper0:
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-    hostname: zookeeper0.example.com
-    image: hyperledger/fabric-zookeeper:x86_64-1.0.0-beta
-    # Give network alias
-    networks:
-      - hyperledger-ov
-    environment:
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
-      - ZOO_MY_ID=1
-      - ZOO_SERVERS=server.1=zookeeper0:2888:3888 server.2=zookeeper1:2888:3888 server.3=zookeeper2:2888:3888
-`
 var TAG = `:x86_64-1.0.0-beta`
 
-func main() {
-	////// Create Zookeepr /////////////////
-  t := &TopLevel{}
+func GenDockerCompose(serviceName string, domainName string, networkName string, num ...int) (*DockerCompose, error){
+  var dockerCompose = &DockerCompose{}
+	dockerCompose.Version = "3"
 
-  //networks := make(map[string]*Network, 1)
-  //networks["hyp-ov"], _ = GenNetwork("hyp-ov")
-  //err := yaml.Unmarshal([]byte(net), &t)git@github.com:ChoiSD/hyperledger_on_swarm.git
-
-  //t.Networks = networks
-  t.Version = "3"
-
-	err := GenNetwork(t, "hyp-ov")
+	err := GenNetwork(dockerCompose, networkName)
 	check(err)
 
-  err = GenService(t, "sdchoi.com", "zookeeper", "hyp-ov", 3)
-	check(err)
-	//////////////////////////////////////////////////////////
+	switch serviceName {
+	case "peer":
+		err = GenService(dockerCompose, domainName, serviceName, networkName, num[0], num[1])
+	default:
+		err = GenService(dockerCompose, domainName, serviceName, networkName, num[0])
+	}
 
-	////////// Create Kafka ////////////////////////////
-	tk := &TopLevel{}
-	tk.Version = "3"
-	err = GenNetwork(tk, "hyp-ov")
-	check(err)
+	return dockerCompose, nil
 
-	err = GenService(tk, "sdchoi.com", "kafka", "hyp-ov", 3)
-	check(err)
-	/////////////////////////////////////////////////////////
+	//////// Create Zookeepr /////////////////
+  //t := &DockerCompose{}
 
+  ////networks := make(map[string]*Network, 1)
+  ////networks["hyp-ov"], _ = GenNetwork("hyp-ov")
+  ////err := yaml.Unmarshal([]byte(net), &t)git@github.com:ChoiSD/hyperledger_on_swarm.git
 
-	///////// Create Orderer ////////////////////////////////
-	to := &TopLevel{}
-	to.Version = "3"
-	err = GenNetwork(to, "hyp-ov")
-	check(err)
+  ////t.Networks = networks
+  //t.Version = "3"
 
-	err = GenService(to, "sdchoi.com", "orderer", "hyp-ov", 3)
-	check(err)
-	/////////////////////////////////////////////////////////
+	//err := GenNetwork(t, "hyp-ov")
+	//check(err)
 
-	////////////// Create CA ////////////////////////////////
-	tc := &TopLevel{}
-	tc.Version = "3"
-	err = GenNetwork(tc, "hyp-ov")
-	check(err)
+  //err = GenService(t, "sdchoi.com", "zookeeper", "hyp-ov", 3)
+	//check(err)
+	////////////////////////////////////////////////////////////
 
-	err = GenService(tc, "sdchoi.com", "ca", "hyp-ov", 3)
-	check(err)
-	err = GenService(tc, "sdchoi.com", "couchdb", "hyp-ov", 4)
-	check(err)
-	err = GenService(tc, "sdchoi.com", "peer", "hyp-ov", 2, 3)
-	check(err)
+	//////////// Create Kafka ////////////////////////////
+	//tk := &DockerCompose{}
+	//tk.Version = "3"
+	//err = GenNetwork(tk, "hyp-ov")
+	//check(err)
+
+	//err = GenService(tk, "sdchoi.com", "kafka", "hyp-ov", 3)
+	//check(err)
 	///////////////////////////////////////////////////////////
-  fmt.Printf("--- t:\n%#v\n\n", *t)
-  d, err := yaml.Marshal(tc)
-  check(err)
-	fmt.Printf("%v\n", string(d))
+
+
+	/////////// Create Orderer ////////////////////////////////
+	//to := &DockerCompose{}
+	//to.Version = "3"
+	//err = GenNetwork(to, "hyp-ov")
+	//check(err)
+
+	//err = GenService(to, "sdchoi.com", "orderer", "hyp-ov", 3)
+	//check(err)
+	///////////////////////////////////////////////////////////
+
+	//////////////// Create CA ////////////////////////////////
+	//tc := &DockerCompose{}
+	//tc.Version = "3"
+	//err = GenNetwork(tc, "hyp-ov")
+	//check(err)
+
+	//err = GenService(tc, "sdchoi.com", "ca", "hyp-ov", 3)
+	//check(err)
+	//err = GenService(tc, "sdchoi.com", "couchdb", "hyp-ov", 4)
+	//check(err)
+	//err = GenService(tc, "sdchoi.com", "peer", "hyp-ov", 2, 3)   // numPeer, numOrgs
+	//check(err)
+	/////////////////////////////////////////////////////////////
+  //fmt.Printf("--- t:\n%#v\n\n", *t)
+  //d, err := yaml.Marshal(to)
+  //check(err)
+	//fmt.Printf("%v\n", string(d))
 }
 
 func GenDeploy(service *Service) (error) {
@@ -156,7 +143,7 @@ func GenDeploy(service *Service) (error) {
 	return nil
 }
 
-func GenService(topLevel *TopLevel, domainName string, serviceName string, networkName string, num ...int) (error) {
+func GenService(dockerCompose *DockerCompose, domainName string, serviceName string, networkName string, num ...int) (error) {
 	var total int
 	if len(num) > 1 {
 		total = num[0] * num[1]
@@ -164,16 +151,16 @@ func GenService(topLevel *TopLevel, domainName string, serviceName string, netwo
 		total = num[0]
 	}
 
-	topLevel.Services = make(map[string]*Service, total)
+	dockerCompose.Services = make(map[string]*Service, total)
 
 	for i := 0; i < total; i++ {
-		err := GenDeploy(service)
-		check(err)
-		
+		var serviceHost string
+		var service *Service
+
 		switch serviceName {
 		case "zookeeper":
-			serviceHost := serviceName + strconv.Itoa(i)
-			service := &Service{
+			serviceHost = "zookeeper" + strconv.Itoa(i)
+			service = &Service{
 				Hostname:	serviceHost + "." + domainName,
 			}
 			service.Networks = make(map[string]*ServNet, 1)
@@ -190,10 +177,12 @@ func GenService(topLevel *TopLevel, domainName string, serviceName string, netwo
 			service.Environment[0] = "CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=" + networkName
 			service.Environment[1] = "ZOO_MY_ID=" + strconv.Itoa(i + 1)
 			service.Environment[2] = "ZOO_SERVERS=" + zookeeperList
+			err := GenDeploy(service)
+			check(err)
 
 		case "kafka":
-			serviceHost := serviceName + strconv.Itoa(i)
-			service := &Service{
+			serviceHost = "kafka" + strconv.Itoa(i)
+			service = &Service{
 				Hostname:	serviceHost + "." + domainName,
 			}
 			service.Networks = make(map[string]*ServNet, 1)
@@ -215,10 +204,12 @@ func GenService(topLevel *TopLevel, domainName string, serviceName string, netwo
 			service.Environment[5] = "KAFKA.MIN_INSYNC_REPLICAS=2"
 			service.Environment[6] = "KAFKA_ZOOKEEPER_CONNECT=" + zookeeperString
 			service.Environment[7] = "KAFKA_BROKER_ID=" +	strconv.Itoa(i)
+			err := GenDeploy(service)
+			check(err)
 
 		case "orderer":
-			serviceHost := serviceName + strconv.Itoa(i)
-			service := &Service{
+			serviceHost = "orderer" + strconv.Itoa(i)
+			service = &Service{
 				Hostname:	serviceHost + "." + domainName,
 			}
 			service.Networks = make(map[string]*ServNet, 1)
@@ -249,10 +240,12 @@ func GenService(topLevel *TopLevel, domainName string, serviceName string, netwo
 			service.Volumes[0] = "./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block"
 			service.Volumes[1] = "./crypto-config/ordererOrganizations/" + domainName + "/orderers/" + serviceHost + "." + domainName + "/msp:/var/hyperledger/orderer/msp"
 			service.Volumes[2] = "./crypto-config/ordererOrganizations/" + domainName + "/orderers/" + serviceHost + "." + domainName + "/tls/:/var/hyperledger/orderer/tls"
+			err := GenDeploy(service)
+			check(err)
 
 		case "ca":
-			serviceHost := serviceName + strconv.Itoa(i)
-			service := &Service{
+			serviceHost = "ca" + strconv.Itoa(i)
+			service = &Service{
 				Hostname:	serviceHost + "." + domainName,
 			}
 			orgId := strconv.Itoa(i + 1)
@@ -263,30 +256,33 @@ func GenService(topLevel *TopLevel, domainName string, serviceName string, netwo
 			service.Image = "hyperledger/fabric-ca" + TAG
 			service.Environment = make([]string, 5)
 			service.Environment[0] = "FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server"
-      service.Environment[1] = "FABRIC_CA_SERVER_CA_NAME=ca-org2"
+      service.Environment[1] = "FABRIC_CA_SERVER_CA_NAME=ca-org" + orgId
       service.Environment[2] = "FABRIC_CA_SERVER_TLS_ENABLED=true"
       service.Environment[3] = "FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org" + orgId + "." + domainName + "-cert.pem"
-      service.Environment[4] = "FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY"
-
+      service.Environment[4] = "FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA" + orgId + "_PRIVATE_KEY"
+			service.Command = "sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org" + orgId + "." + domainName + "-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA" + orgId + "_PRIVATE_KEY -b admin:adminpw -d'"
 			service.Volumes = make([]string, 1)
 			service.Volumes[0] = "./crypto-config/peerOrganizations/org" + orgId + "." + domainName + "/ca/:/etc/hyperledger/fabric-ca-server-config"
+			err := GenDeploy(service)
+			check(err)
 
 		case "couchdb":
-			serviceHost := serviceName + strconv.Itoa(i)
-			service := &Service{
+			serviceHost = serviceName + strconv.Itoa(i)
+			service = &Service{
 				Hostname:	serviceHost + "." + domainName,
 			}
 			service.Image = "hyperledger/fabric-couchdb" + TAG
 			service.Networks = make(map[string]*ServNet, 1)
 			service.Networks[networkName] = &ServNet{}
+			err := GenDeploy(service)
+			check(err)
 
 		case "peer":
-			//numPeer := num[0]
-			//numOrgs := num[1]
 			peerNum := strconv.Itoa(i % num[0])
 			orgNum := strconv.Itoa((i / num[0]) + 1)
+			serviceHost = "peer" + peerNum + "_org" + orgNum
 			hostName := "peer" + peerNum + ".org" + orgNum + "." + domainName
-			service := &Service{
+			service = &Service{
 				Hostname:	hostName,
 			}
 			service.Networks = make(map[string]*ServNet, 1)
@@ -319,31 +315,29 @@ func GenService(topLevel *TopLevel, domainName string, serviceName string, netwo
 			service.Volumes[0] = "/var/run/:/host/var/run/"
 			service.Volumes[1] = "./crypto-config/peerOrganizations/org" + orgNum + "." + domainName + "/peers/" + hostName + "/msp:/etc/hyperledger/fabric/msp"
 			service.Volumes[2] = "./crypto-config/peerOrganizations/org" + orgNum + "." + domainName + "/peers/" + hostName + "/tls:/etc/hyperledger/fabric/tls"
+			err := GenDeploy(service)
+			check(err)
+		default:
+			log.Fatalf("You didn't specify service name!!..\n")
 		}
-		topLevel.Services[serviceHost] = service
+		dockerCompose.Services[serviceHost] = service
 	}
 	return nil
 }
 
-func GenNetwork(topLevel *TopLevel, networkName string) (error){
+func GenNetwork(dockerCompose *DockerCompose, networkName string) (error){
 	network := &Network{
     External:  &External{
       Name:   networkName,
     },
   }
 
-	topLevel.Networks = make(map[string]*Network, 1)
-	topLevel.Networks[networkName] = network
+	dockerCompose.Networks = make(map[string]*Network, 1)
+	dockerCompose.Networks[networkName] = network
 
   return nil
 }
 
 func arrayToString(array []string, delim string) (string) {
 	return strings.Trim(strings.Join(strings.Fields(fmt.Sprint(array)), delim), "[]")
-}
-
-func check(err error) {
-	if err != nil {
-		log.Fatalf("error: %v\n", err)
-	}
 }

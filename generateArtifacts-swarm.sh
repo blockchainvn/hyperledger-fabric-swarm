@@ -11,6 +11,12 @@
 CHANNEL_NAME=$1
 : ${CHANNEL_NAME:="mychannel"}
 echo $CHANNEL_NAME
+DOMAIN_NAME=$2
+: ${DOMAIN_NAME:="example.com"}
+echo $DOMAIN_NAME
+NUM_ORGS=$3
+: ${NUM_ORGS:=2}
+echo $NUM_ORGS
 
 export FABRIC_ROOT=$PWD/../..
 export FABRIC_CFG_PATH=$PWD
@@ -28,18 +34,16 @@ function replacePrivateKey () {
 	fi
 
 	#cp docker-compose-e2e-template.yaml docker-compose-e2e.yaml
-  cp hyperledger-swarm-template.yaml hyperledger-swarm.yaml
-        CURRENT_DIR=$PWD
-        cd crypto-config/peerOrganizations/org1.example.com/ca/
-        PRIV_KEY=$(ls *_sk)
-        cd $CURRENT_DIR
-        #sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
-				sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm.yaml
-        cd crypto-config/peerOrganizations/org2.example.com/ca/
-        PRIV_KEY=$(ls *_sk)
-        cd $CURRENT_DIR
-        #sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
-				sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-swarm.yaml
+  #cp hyperledger-swarm-template.yaml hyperledger-swarm.yaml
+	i=1
+	while [ "$i" -le "$NUM_ORGS" ]; do
+		CURRENT_DIR=$PWD
+  	cd crypto-config/peerOrganizations/org${i}.${DOMAIN_NAME}/ca/
+  	PRIV_KEY=$(ls *_sk)
+  	cd $CURRENT_DIR
+  	#sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
+		sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-ca.yaml
+	done
 }
 
 ## Generates Org certs using cryptogen tool

@@ -113,9 +113,3 @@ func GenPeerConfig(domainName string, numOrgs int, numPeers int) ([]OrgSpec, err
   }
   return config, nil
 }
-
-func check(e error) {
-    if e != nil {
-        panic(e)
-    }
-}
