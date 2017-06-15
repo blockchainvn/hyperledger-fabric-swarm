@@ -50,11 +50,11 @@ func main() {
   var serviceList []string
 
   if numOrderer == 1 {
-    serviceList = make([]string, 4)
-    serviceList = []string{"orderer", "ca", "couchdb", "peer"}
+    serviceList = make([]string, 5)
+    serviceList = []string{"orderer", "ca", "couchdb", "peer", "cli"}
   } else {
-    serviceList = make([]string, 6)
-    serviceList = []string{"zookeeper", "kafka", "orderer", "ca", "couchdb", "peer"}
+    serviceList = make([]string, 7)
+    serviceList = []string{"zookeeper", "kafka", "orderer", "ca", "couchdb", "peer", "cli"}
   }
 
   for _, service := range serviceList {
@@ -76,6 +76,9 @@ func main() {
       check(err)
     case "couchdb":
       composeOutput, err = GenDockerCompose(service, domain, overlayNetwork, numPeer, numOrgs)
+      check(err)
+    case "cli":
+      composeOutput, err = GenDockerCompose(service, domain, overlayNetwork, 1)
       check(err)
     default:
       panic("Service Name isn't specified!!!")

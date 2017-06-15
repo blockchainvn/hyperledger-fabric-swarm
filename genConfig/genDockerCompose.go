@@ -265,6 +265,39 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 			service.Volumes[2] = "./crypto-config/peerOrganizations/org" + orgNum + "." + domainName + "/peers/" + hostName + "/tls:/etc/hyperledger/fabric/tls"
 			err := GenDeploy(service)
 			check(err)
+
+		case "cli":
+			serviceHost = "cli"
+			service = &Service{}
+			service.Image = "hyperledger/fabric-tools" + TAG
+			service.Networks = make(map[string]*ServNet, 1)
+			service.Networks[networkName] = &ServNet{
+				Aliases: []string{"cli"},
+			}
+			service.Environment = make([]string, 12)
+			service.Environment[0]  = "CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=" + networkName
+			service.Environment[1]  = "GOPATH=/opt/gopath"
+      service.Environment[2]  = "CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock"
+      service.Environment[3]  = "CORE_LOGGING_LEVEL=DEBUG"
+      service.Environment[4]  = "CORE_PEER_ID=cli"
+      service.Environment[5]  = "CORE_PEER_ADDRESS=peer0.org1." + domainName + ":7051"
+      service.Environment[6]  = "CORE_PEER_LOCALMSPID=Org1MSP"
+      service.Environment[7]  = "CORE_PEER_TLS_ENABLED=true"
+      service.Environment[8]  = "CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1." + domainName + "/peers/peer0.org1." + domainName + "/tls/server.crt"
+      service.Environment[9]  = "CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1." + domainName + "/peers/peer0.org1." + domainName + "/tls/server.key"
+      service.Environment[10] = "CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1." + domainName + "/peers/peer0.org1." + domainName + "/tls/ca.crt"
+      service.Environment[11] = "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1." + domainName + "/users/Admin@org1." + domainName + "/msp"
+			service.WorkingDir = "/opt/gopath/src/github.com/hyperledger/fabric/peer"
+			service.Command = "sleep 3600"
+			service.Volumes = make([]string, 5)
+			service.Volumes[0] = "/var/run/:/host/var/run/"
+			service.Volumes[1] = "./chaincode/go/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go"
+			service.Volumes[2] = "./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/"
+			service.Volumes[3] = "./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/"
+			service.Volumes[4] = "./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts"
+			err := GenDeploy(service)
+			check(err)
+			
 		default:
 			log.Fatalf("You didn't specify service name!!..\n")
 		}
