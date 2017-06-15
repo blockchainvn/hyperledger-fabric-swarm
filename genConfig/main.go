@@ -60,7 +60,7 @@ func main() {
   for _, service := range serviceList {
     switch service {
     case "peer":
-      composeOutput, err = GenDockerCompose("peer", domain, overlayNetwork, numPeer, numOrgs)
+      composeOutput, err = GenDockerCompose(service, domain, overlayNetwork, numPeer, numOrgs)
       check(err)
     case "zookeeper":
       composeOutput, err = GenDockerCompose(service, domain, overlayNetwork, numZookeeper)

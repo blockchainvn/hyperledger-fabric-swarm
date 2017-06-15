@@ -65,69 +65,13 @@ func GenDockerCompose(serviceName string, domainName string, networkName string,
 	check(err)
 
 	switch serviceName {
-	case "peer":
+	case "peer", "couchdb":
 		err = GenService(dockerCompose, domainName, serviceName, networkName, num[0], num[1])
 	default:
 		err = GenService(dockerCompose, domainName, serviceName, networkName, num[0])
 	}
 
 	return dockerCompose, nil
-
-	//////// Create Zookeepr /////////////////
-  //t := &DockerCompose{}
-
-  ////networks := make(map[string]*Network, 1)
-  ////networks["hyp-ov"], _ = GenNetwork("hyp-ov")
-  ////err := yaml.Unmarshal([]byte(net), &t)git@github.com:ChoiSD/hyperledger_on_swarm.git
-
-  ////t.Networks = networks
-  //t.Version = "3"
-
-	//err := GenNetwork(t, "hyp-ov")
-	//check(err)
-
-  //err = GenService(t, "sdchoi.com", "zookeeper", "hyp-ov", 3)
-	//check(err)
-	////////////////////////////////////////////////////////////
-
-	//////////// Create Kafka ////////////////////////////
-	//tk := &DockerCompose{}
-	//tk.Version = "3"
-	//err = GenNetwork(tk, "hyp-ov")
-	//check(err)
-
-	//err = GenService(tk, "sdchoi.com", "kafka", "hyp-ov", 3)
-	//check(err)
-	///////////////////////////////////////////////////////////
-
-
-	/////////// Create Orderer ////////////////////////////////
-	//to := &DockerCompose{}
-	//to.Version = "3"
-	//err = GenNetwork(to, "hyp-ov")
-	//check(err)
-
-	//err = GenService(to, "sdchoi.com", "orderer", "hyp-ov", 3)
-	//check(err)
-	///////////////////////////////////////////////////////////
-
-	//////////////// Create CA ////////////////////////////////
-	//tc := &DockerCompose{}
-	//tc.Version = "3"
-	//err = GenNetwork(tc, "hyp-ov")
-	//check(err)
-
-	//err = GenService(tc, "sdchoi.com", "ca", "hyp-ov", 3)
-	//check(err)
-	//err = GenService(tc, "sdchoi.com", "couchdb", "hyp-ov", 4)
-	//check(err)
-	//err = GenService(tc, "sdchoi.com", "peer", "hyp-ov", 2, 3)   // numPeer, numOrgs
-	//check(err)
-	/////////////////////////////////////////////////////////////
-  //fmt.Printf("--- t:\n%#v\n\n", *t)
-  //d, err := yaml.Marshal(to)
-  //check(err)
-	//fmt.Printf("%v\n", string(d))
 }
 
 func GenDeploy(service *Service) (error) {
@@ -278,6 +222,8 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 				Aliases:	[]string{serviceHost},
 			}
 			err := GenDeploy(service)
+			fmt.Println(num)
+			fmt.Println(serviceHost)
 			check(err)
 
 		case "peer":
