@@ -75,7 +75,7 @@ func main() {
       composeOutput, err = GenDockerCompose(service, domain, overlayNetwork, numOrgs)
       check(err)
     case "couchdb":
-      composeOutput, err = GenDockerCompose(service, domain, overlayNetwork, numPeer)
+      composeOutput, err = GenDockerCompose(service, domain, overlayNetwork, numPeer, numOrgs)
       check(err)
     default:
       panic("Service Name isn't specified!!!")

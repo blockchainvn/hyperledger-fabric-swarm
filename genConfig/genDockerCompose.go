@@ -199,10 +199,10 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 			service.Environment = make([]string, 8)
 			service.Environment[0] = "CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=" + networkName
 			service.Environment[1] = "KAFKA_MESSAGE_MAX_BYTES=103809024" // 99 MB
-			service.Environment[2] = "KAFAK_REPLICA_FETCH_MAX_BYTES=103809024" // 99 MB
+			service.Environment[2] = "KAFKA_REPLICA_FETCH_MAX_BYTES=103809024" // 99 MB
 			service.Environment[3] = "KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false"
 			service.Environment[4] = "KAFKA_DEFAULT_REPLICATION_FACTOR=3"
-			service.Environment[5] = "KAFKA.MIN_INSYNC_REPLICAS=2"
+			service.Environment[5] = "KAFKA_MIN_INSYNC_REPLICAS=2"
 			service.Environment[6] = "KAFKA_ZOOKEEPER_CONNECT=" + zookeeperString
 			service.Environment[7] = "KAFKA_BROKER_ID=" +	strconv.Itoa(i)
 			err := GenDeploy(service)

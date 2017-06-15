@@ -195,7 +195,7 @@ func GenOrderer(numOrderer int, domainName string, kafka Kafka) (Orderer, error)
 func GenKafka(numKafka int, domainName string) (Kafka, error) {
   var kafka_list []string
   for i := 0; i < numKafka; i++ {
-    kafka_list = append(kafka_list, "kafka" + strconv.Itoa(i) + "." + domainName)
+    kafka_list = append(kafka_list, "kafka" + strconv.Itoa(i) + "." + domainName + ":9092")
   }
 
   var kafka = Kafka{
