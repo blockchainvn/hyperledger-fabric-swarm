@@ -222,8 +222,6 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 				Aliases:	[]string{serviceHost},
 			}
 			err := GenDeploy(service)
-			fmt.Println(num)
-			fmt.Println(serviceHost)
 			check(err)
 
 		case "peer":
