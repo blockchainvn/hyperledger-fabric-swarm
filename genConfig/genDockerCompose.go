@@ -106,7 +106,7 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 		case "zookeeper":
 			serviceHost = "zookeeper" + strconv.Itoa(i)
 			service = &Service{
-				Hostname:	serviceHost + "." + domainName,
+				Hostname:	serviceHost,
 			}
 			service.Networks = make(map[string]*ServNet, 1)
 			service.Networks[networkName] = &ServNet{
@@ -297,7 +297,7 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 			service.Volumes[4] = "./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts"
 			err := GenDeploy(service)
 			check(err)
-			
+
 		default:
 			log.Fatalf("You didn't specify service name!!..\n")
 		}

@@ -138,3 +138,50 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 ### Do the rest of [Getting Started of Hyperledger Fabric Documentation](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)
 * Create & Join channel, Install, Instantiate & Query chaincodes
   - environment variables & orderer's name should be corrected to work properly.
+
+#### Examples
+* Generate Hyperledger Fabric config
+  ```
+  ./genConfig -domain sdchoi.com -Kafka 3 -Orderer 2 -Zookeeper 3 -Orgs 2 -Peer 2
+  ```
+* Generate artifacts
+  ```
+  ./generateArtifacts-swarm.sh sdchannel sdchoi.com 2
+  ```
+* Deploy Hyperledger Fabric
+  ```
+  docker stack deploy -c hyperledger-zookeeper.yaml hyperledger-zk
+  docker stack deploy -c hyperledger-kafka.yaml hyperledger-kafka
+  docker stack deploy -c hyperledger-orderer.yaml hyperledger-orderer
+  docker stack deploy -c hyperledger-couchdb.yaml hyperledger-couchdb
+  docker stack deploy -c hyperledger-peer.yaml hyperledger-peer
+  docker stack deploy -c hyperledger-ca.yaml hyperledger-ca
+  docker stack deploy -c hyperledger-cli.yaml hyperledger-cli
+  ```
+* Attach to cli container
+  ```
+  docker ps --format "table {{.ID}}" -f "label=com.docker.stack.namespace=hyperledger-cli"
+  docker exec -it cfa2d7d964fc bash
+  ```
+* Create a channel
+  ```
+  export CHANNEL_NAME=sdchannel
+  peer channel create -o orderer0.sdchoi.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer0.sdchoi.com/msp/cacerts/ca.sdchoi.com-cert.pem
+  ```
+* Join a channel
+  ```
+  peer channel join -b sdchannel.block
+  peer channel list
+  ```
+* Install & Initiate Chaincode
+  ```
+  peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02
+  peer chaincode instantiate -o orderer0.sdchoi.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer0.sdchoi.com/msp/cacerts/ca.sdchoi.com-cert.pem -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('Org1MSP.member','Org2MSP.member')"
+  ```
+* Query & Invoke Chaincode
+  ```
+  peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}'
+  peer chaincode invoke -o orderer1.sdchoi.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer1.sdchoi.com/msp/cacerts/ca.sdchoi.com-cert.pem  -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}'
+  peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}'
+  peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","b"]}'
+  ```
