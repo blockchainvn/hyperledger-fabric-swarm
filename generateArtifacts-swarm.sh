@@ -90,18 +90,15 @@ function generateChannelArtifacts() {
 	echo "#################################################################"
 	$CONFIGTXGEN -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
 
-	echo
-	echo "#################################################################"
-	echo "#######    Generating anchor peer update for Org1MSP   ##########"
-	echo "#################################################################"
-	$CONFIGTXGEN -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org1MSP
-
-	echo
-	echo "#################################################################"
-	echo "#######    Generating anchor peer update for Org2MSP   ##########"
-	echo "#################################################################"
-	$CONFIGTXGEN -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org2MSP
-	echo
+	i=1
+	while [ "$i" -le "$NUM_ORGS" ]; do
+		echo
+		echo "#################################################################"
+		echo "#######    Generating anchor peer update for Org${i}MSP   ##########"
+		echo "#################################################################"
+		$CONFIGTXGEN -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/Org${i}MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org${i}MSP
+		i=$(($i + 1))
+	done
 }
 
 generateCerts
