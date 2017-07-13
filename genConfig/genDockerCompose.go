@@ -55,7 +55,8 @@ type RestartPolicy struct {
   Window        time.Duration         `yaml:"window,omitempty"`
 }
 
-var TAG = `:x86_64-1.0.0-beta`
+//var TAG = `:x86_64-1.0.0-beta`
+var TAG = `:x86_64-1.0.0`
 
 func GenDockerCompose(serviceName string, domainName string, networkName string, num ...int) (*DockerCompose, error){
   var dockerCompose = &DockerCompose{}
@@ -237,26 +238,26 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 			service.Networks[networkName] = &ServNet{
 				Aliases: []string{hostName},
 			}
-			service.Environment = make([]string, 19)
+			service.Environment = make([]string, 17)
 			service.Environment[0]  = "CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock"
       service.Environment[1]  = "CORE_LOGGING_LEVEL=DEBUG"
       service.Environment[2]  = "CORE_PEER_TLS_ENABLED=true"
-      service.Environment[3]  = "CORE_PEER_ENDORSER_ENABLED=true"
-      service.Environment[4]  = "CORE_PEER_GOSSIP_USELEADERELECTION=true"
-      service.Environment[5]  = "CORE_PEER_GOSSIP_ORGLEADER=false"
-      service.Environment[6]  = "CORE_PEER_GOSSIP_SKIPHANDSHAKE=true"
-      service.Environment[7]  = "CORE_PEER_PROFILE_ENABLED=true"
-      service.Environment[8]  = "CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt"
-      service.Environment[9]  = "CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key"
-      service.Environment[10] = "CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt"
-      service.Environment[11] = "CORE_PEER_ID=" + hostName
-      service.Environment[12] = "CORE_PEER_ADDRESS=" + hostName + ":7051"
-      service.Environment[13] = "CORE_PEER_GOSSIP_EXTERNALENDPOINT=" + hostName + ":7051"
-      service.Environment[14] = "CORE_PEER_LOCALMSPID=Org" + orgNum +"MSP"
-      service.Environment[15] = "CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=" + networkName
-      service.Environment[16] = "CORE_LEDGER_STATE_STATEDATABASE=CouchDB"
-      service.Environment[17] = "CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb"+ strconv.Itoa(i) + ":5984"
-			service.Environment[18] = "CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org" + orgNum + "." + domainName + ":7051"
+      service.Environment[3]  = "CORE_PEER_GOSSIP_USELEADERELECTION=true"
+      service.Environment[4]  = "CORE_PEER_GOSSIP_ORGLEADER=false"
+      service.Environment[5]  = "CORE_PEER_PROFILE_ENABLED=true"
+      service.Environment[6]  = "CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt"
+      service.Environment[7]  = "CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key"
+      service.Environment[8] = "CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt"
+      service.Environment[9] = "CORE_PEER_ID=" + hostName
+      service.Environment[10] = "CORE_PEER_ADDRESS=" + hostName + ":7051"
+      service.Environment[11] = "CORE_PEER_GOSSIP_EXTERNALENDPOINT=" + hostName + ":7051"
+      service.Environment[12] = "CORE_PEER_LOCALMSPID=Org" + orgNum +"MSP"
+      service.Environment[13] = "CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=" + networkName
+      service.Environment[14] = "CORE_LEDGER_STATE_STATEDATABASE=CouchDB"
+      service.Environment[15] = "CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb"+ strconv.Itoa(i) + ":5984"
+			service.Environment[16] = "CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org" + orgNum + "." + domainName + ":7051"
+			//service.Environment[3]  = "CORE_PEER_ENDORSER_ENABLED=true"
+			//service.Environment[6]  = "CORE_PEER_GOSSIP_SKIPHANDSHAKE=true"
 			service.WorkingDir = "/opt/gopath/src/github.com/hyperledger/fabric/peer"
 			service.Command = "peer node start"
 			service.Volumes = make([]string, 3)
@@ -291,7 +292,7 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 			service.Command = "sleep 3600"
 			service.Volumes = make([]string, 5)
 			service.Volumes[0] = "/var/run/:/host/var/run/"
-			service.Volumes[1] = "./chaincode/go/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go"
+			service.Volumes[1] = "./../chaincode/go/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go"
 			service.Volumes[2] = "./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/"
 			service.Volumes[3] = "./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/"
 			service.Volumes[4] = "./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts"

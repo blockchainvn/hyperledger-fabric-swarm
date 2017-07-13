@@ -1,17 +1,10 @@
 # hyperledger_on_swarm
 
 This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
-
-## Limitation
-* ~~This works WITHOUT TLS only.~~
-  - ~~Whenever enable TLS, grpc error code 14 occurs.~~ (seems it works with TLS..)
-* ~~Kafka, Zookeeper has not been tested.~~ (Kafka & Zookeeper are also tested)
+- Supported version : 1.0.0 GA
 
 ## Instructions
-* ~~There are two versions~~
-  - ~~solo : 2 CAs, 4 peers, 4 CouchDBs, 1 orderer~~
-  - ~~kafka : 2 CAs, 4 peers, 4 CouchDBs, 3 orderers, 3 kafkas, 3 zookeepers~~
-* Now you can specify number of each component. Supported components are:
+* You can specify number of each component. Supported components are:
   - Number of Organizations (CA will be one per a Organization)
   - Number of Peer per a Organization
   - Number of Orderer
@@ -68,23 +61,25 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
    - For example,
    ```
     cd /nfs-share
-    curl -sSL https://goo.gl/LQkuoh | bash
+    git clone https://github.com/hyperledger/fabric-samples.git
+    cd fabric-samples
+    curl -sSL https://goo.gl/iX9dek | bash
     ```
 * I recommend you get ccenv image on all host. Fabric does not pull the latest ccenv image for you.
     so on ALL host,
     ```
-    docker pull hyperledger/fabric-ccenv:x86_64-1.0.0-beta
+    docker pull hyperledger/fabric-ccenv:x86_64-1.0.0
     ```
 
 ### Generate the artifacts
 * clone this git
   ```
-  cd release/linux-amd64
+  cd first-network
   git clone https://github.com/ChoiSD/hyperledger_on_swarm.git
   ```
 * copy config generator & crypto-config generating script
   ```
-  cp hyperledger_on_swarm/generateArtifacts-swarm.sh $PWD
+  cp hyperledger_on_swarm/generateArtifacts.sh $PWD
   cp hyperledger_on_swarm/genConfig/genConfig $PWD
   ```
 * generate config file for your own configuration. For example,
@@ -97,11 +92,11 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   ```
 * generate artifacts
   ```
-  ./generateArtifacts-swarm.sh <CHANNEL-NAME> <DOMAIN-NAME> <NUM-ORGS>
+  ./generateArtifacts.sh -c <CHANNEL-NAME> -d <DOMAIN-NAME> -o <NUM-ORGS>
   ```
   For example,
   ```
-  ./generateArtifacts-swarm.sh sdchannel sdchoi.com 4
+  ./generateArtifacts.sh -c sdchannel -d sdchoi.com -o 4
   ```
 * share two directories (channel-artifacts, crypto-config) among all hosts with same path
 
@@ -137,7 +132,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 
 ### Do the rest of [Getting Started of Hyperledger Fabric Documentation](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)
 * Create & Join channel, Install, Instantiate & Query chaincodes
-  - environment variables & orderer's name should be corrected to work properly.
+  - NOTE: environment variables & orderer's name should be corrected to work properly.
 
 #### Examples
 * Generate Hyperledger Fabric config
@@ -146,7 +141,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   ```
 * Generate artifacts
   ```
-  ./generateArtifacts-swarm.sh sdchannel sdchoi.com 2
+  ./generateArtifacts.sh -c sdchannel -d sdchoi.com -o 2
   ```
 * Deploy Hyperledger Fabric
   ```
@@ -160,13 +155,12 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   ```
 * Attach to cli container
   ```
-  docker ps --format "table {{.ID}}" -f "label=com.docker.stack.namespace=hyperledger-cli"
-  docker exec -it cfa2d7d964fc bash
+  docker exec -it $(docker ps --format "table {{.ID}}" -f "label=com.docker.stack.namespace=hyperledger-cli" | tail -1) bash
   ```
 * Create a channel
   ```
   export CHANNEL_NAME=sdchannel
-  peer channel create -o orderer0.sdchoi.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer0.sdchoi.com/msp/cacerts/ca.sdchoi.com-cert.pem
+  peer channel create -o orderer0.sdchoi.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer0.sdchoi.com/msp/tlscacerts/tlsca.sdchoi.com-cert.pem
   ```
 * Join a channel
   ```
@@ -176,12 +170,12 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 * Install & Initiate Chaincode
   ```
   peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02
-  peer chaincode instantiate -o orderer0.sdchoi.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer0.sdchoi.com/msp/cacerts/ca.sdchoi.com-cert.pem -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('Org1MSP.member','Org2MSP.member')"
+  peer chaincode instantiate -o orderer0.sdchoi.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer0.sdchoi.com/msp/tlscacerts/tlsca.sdchoi.com-cert.pem -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('Org1MSP.member','Org2MSP.member')"
   ```
 * Query & Invoke Chaincode
   ```
   peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}'
-  peer chaincode invoke -o orderer1.sdchoi.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer1.sdchoi.com/msp/cacerts/ca.sdchoi.com-cert.pem  -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}'
+  peer chaincode invoke -o orderer1.sdchoi.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer1.sdchoi.com/msp/tlscacerts/tlsca.sdchoi.com-cert.pem  -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}'
   peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}'
   peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","b"]}'
   ```
