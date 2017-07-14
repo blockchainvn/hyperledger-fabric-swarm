@@ -292,7 +292,7 @@ func GenService(dockerCompose *DockerCompose, domainName string, serviceName str
 			service.Command = "sleep 3600"
 			service.Volumes = make([]string, 5)
 			service.Volumes[0] = "/var/run/:/host/var/run/"
-			service.Volumes[1] = "./../chaincode/go/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go"
+			service.Volumes[1] = "./../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go"
 			service.Volumes[2] = "./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/"
 			service.Volumes[3] = "./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/"
 			service.Volumes[4] = "./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts"
