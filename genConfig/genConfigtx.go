@@ -168,6 +168,12 @@ func GenOrderer(numOrderer int, domainName string, kafka Kafka) (Orderer, error)
     orderer = Orderer{
       OrdererType:  "solo",
       Addresses:    address_list,
+      BatchTimeout: 2 * time.Second,
+      BatchSize:    BatchSize{
+        MaxMessageCount:  10,
+        AbsoluteMaxBytes: 99 * 1024 * 1024, // 99 MB
+        PreferredMaxBytes:  512 * 1024, // 512 KB
+      },
       Organizations:  make([]*Organization,1),
     }
   } else {

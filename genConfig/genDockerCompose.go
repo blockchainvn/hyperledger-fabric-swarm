@@ -55,8 +55,8 @@ type RestartPolicy struct {
   Window        time.Duration         `yaml:"window,omitempty"`
 }
 
-//var TAG = `:x86_64-1.0.0-beta`
-var TAG = `:x86_64-1.0.0`
+//var TAG = `:x86_64-1.0.0`
+var TAG = `:latest`
 
 func GenDockerCompose(serviceName string, domainName string, networkName string, num ...int) (*DockerCompose, error){
   var dockerCompose = &DockerCompose{}
