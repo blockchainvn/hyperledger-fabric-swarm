@@ -1,7 +1,7 @@
 # hyperledger_on_swarm
 
 This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
-- Supported version : 1.0.0 GA
+- Supported version : 1.0.0 GA and above (1.0.1 currently)
 * You can specify number of each component. Supported components are:
   - Number of Organizations (CA will be one per a Organization)
   - Number of Peer per a Organization
