@@ -9,7 +9,7 @@ MSP_PATH=../crypto-config/peerOrganizations/$ORG/users/Admin@org1-f-1/msp
   
 # create Peer Admin
 PRIVATE_KEY=$(ls $MSP_PATH/keystore/*_sk | head -1)
-CERTIFICATE=$(cat $MSP_PATH/signcerts/Admin@org1-f-1-cert.pem | sed 's/$/\\r\\n/' | tr -d '\n')
+CERTIFICATE=$(cat $MSP_PATH/signcerts/Admin@$ORG-cert.pem | sed 's/$/\\r\\n/' | tr -d '\n')
 PRIVATE_KEY_NAME=`basename $PRIVATE_KEY | sed 's/_sk//'`
 
 cat << EOF > hfc-key-store/PeerAdmin
