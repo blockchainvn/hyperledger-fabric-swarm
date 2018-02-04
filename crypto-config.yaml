@@ -1,0 +1,20 @@
+OrdererOrgs:
+- Name: Orderer
+  Domain: qsoft.com
+  Specs:
+  - Hostname: orderer0
+  - Hostname: orderer1
+  - Hostname: orderer2
+PeerOrgs:
+- Name: Org1
+  Domain: org1.qsoft.com
+  Template:
+    Count: 1
+  Users:
+    Count: 1
+- Name: Org2
+  Domain: org2.qsoft.com
+  Template:
+    Count: 1
+  Users:
+    Count: 1

@@ -1,0 +1,54 @@
+version: "3"
+networks:
+  hyperledger-ov:
+    external:
+      name: hyperledger-ov
+services:
+  ca0:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: ca0.qsoft.com
+    image: hyperledger/fabric-ca:x86_64-1.0.2
+    networks:
+      hyperledger-ov:
+        aliases:
+        - ca_peerOrg1
+    environment:
+    - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+    - FABRIC_CA_SERVER_CA_NAME=ca-org1
+    - FABRIC_CA_SERVER_TLS_ENABLED=true
+    - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.qsoft.com-cert.pem
+    - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/5c3498d63bd6cb5e55394c1bf639b63ec5d47208b2c408bb829bd32f89b33c41_sk
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.qsoft.com-cert.pem
+      --ca.keyfile /etc/hyperledger/fabric-ca-server-config/5c3498d63bd6cb5e55394c1bf639b63ec5d47208b2c408bb829bd32f89b33c41_sk -b admin:adminpw
+      -d'
+    volumes:
+    - ./crypto-config/peerOrganizations/org1.qsoft.com/ca/:/etc/hyperledger/fabric-ca-server-config
+  ca1:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: ca1.qsoft.com
+    image: hyperledger/fabric-ca:x86_64-1.0.2
+    networks:
+      hyperledger-ov:
+        aliases:
+        - ca_peerOrg2
+    environment:
+    - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+    - FABRIC_CA_SERVER_CA_NAME=ca-org2
+    - FABRIC_CA_SERVER_TLS_ENABLED=true
+    - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.qsoft.com-cert.pem
+    - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/1c68a853b0465f26a5d3b76f58b8753b3214520c2c11bac0036d36ae71a8efb4_sk
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.qsoft.com-cert.pem
+      --ca.keyfile /etc/hyperledger/fabric-ca-server-config/1c68a853b0465f26a5d3b76f58b8753b3214520c2c11bac0036d36ae71a8efb4_sk -b admin:adminpw
+      -d'
+    volumes:
+    - ./crypto-config/peerOrganizations/org2.qsoft.com/ca/:/etc/hyperledger/fabric-ca-server-config

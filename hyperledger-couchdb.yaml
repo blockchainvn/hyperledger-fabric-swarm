@@ -1,0 +1,32 @@
+version: "3"
+networks:
+  hyperledger-ov:
+    external:
+      name: hyperledger-ov
+services:
+  couchdb0:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: couchdb0.qsoft.com
+    image: hyperledger/fabric-couchdb:x86_64-1.0.2
+    networks:
+      hyperledger-ov:
+        aliases:
+        - couchdb0
+  couchdb1:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: couchdb1.qsoft.com
+    image: hyperledger/fabric-couchdb:x86_64-1.0.2
+    networks:
+      hyperledger-ov:
+        aliases:
+        - couchdb1

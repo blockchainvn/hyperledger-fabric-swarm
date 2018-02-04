@@ -1,0 +1,72 @@
+version: "3"
+networks:
+  hyperledger-ov:
+    external:
+      name: hyperledger-ov
+services:
+  kafka0:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: kafka0.qsoft.com
+    image: hyperledger/fabric-kafka:x86_64-1.0.2
+    networks:
+      hyperledger-ov:
+        aliases:
+        - kafka0.qsoft.com
+    environment:
+    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+    - KAFKA_MESSAGE_MAX_BYTES=103809024
+    - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+    - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+    - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+    - KAFKA_MIN_INSYNC_REPLICAS=2
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    - KAFKA_BROKER_ID=0
+  kafka1:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: kafka1.qsoft.com
+    image: hyperledger/fabric-kafka:x86_64-1.0.2
+    networks:
+      hyperledger-ov:
+        aliases:
+        - kafka1.qsoft.com
+    environment:
+    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+    - KAFKA_MESSAGE_MAX_BYTES=103809024
+    - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+    - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+    - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+    - KAFKA_MIN_INSYNC_REPLICAS=2
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    - KAFKA_BROKER_ID=1
+  kafka2:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: kafka2.qsoft.com
+    image: hyperledger/fabric-kafka:x86_64-1.0.2
+    networks:
+      hyperledger-ov:
+        aliases:
+        - kafka2.qsoft.com
+    environment:
+    - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=hyperledger-ov
+    - KAFKA_MESSAGE_MAX_BYTES=103809024
+    - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+    - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+    - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+    - KAFKA_MIN_INSYNC_REPLICAS=2
+    - KAFKA_ZOOKEEPER_CONNECT=zookeeper0:2181,zookeeper1:2181,zookeeper2:2181
+    - KAFKA_BROKER_ID=2

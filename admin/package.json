@@ -1,0 +1,22 @@
+{
+    "name": "admin",
+    "version": "1.0.0",
+    "description": "Hyperledger Fabric Sample Application",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "body-parser": "latest",
+        "commander": "^2.11.0",
+        "express": "latest",
+        "fabric-ca-client": "^1.0.0",
+        "fabric-client": "^1.0.0",
+        "grpc": "^1.7.2",
+        "x509": "^0.3.3"
+    },
+    "author": "tupt",
+    "license": "Apache-2.0",
+    "keywords": ["Hyperledger", "Fabric", "Car", "Sample", "Application"]
+}

@@ -8,7 +8,7 @@
 
 #set -e
 
-export FABRIC_ROOT=${PWD}/..
+export FABRIC_ROOT=${PWD}
 export FABRIC_CFG_PATH=${PWD}
 echo
 
@@ -59,6 +59,8 @@ function generateCerts (){
     exit 1
   fi
 
+  rm -rf ./crypto-config
+
 	echo
 	echo "##########################################################"
 	echo "##### Generate certificates using cryptogen tool #########"
@@ -80,6 +82,8 @@ function generateChannelArtifacts() {
     echo "configtxgen tool not found. exiting"
     exit 1
   fi
+
+  # rm -rf ./channel-artifacts
 
 	echo "##########################################################"
 	echo "#########  Generating Orderer Genesis block ##############"

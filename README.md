@@ -1,5 +1,10 @@
 # hyperledger_on_swarm
 
+# portainer
+```sh
+docker run -d -p 9000:9000 --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /opt/portainer:/data portainer/portainer
+```
+
 This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 - Supported version : 1.0.0 GA and above (1.0.1 currently)
 * You can specify number of each component. Supported components are:
