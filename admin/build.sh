@@ -11,7 +11,7 @@ if [[ -z $IMAGE_CHECK ]];then
 fi
 
 : ${NAMESPACE:="default"}
-: ${PORT:="9000"}
+: ${PORT:="8080"}
   
 
 # create template then you can run it normally
