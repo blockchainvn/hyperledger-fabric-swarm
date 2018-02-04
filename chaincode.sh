@@ -35,6 +35,7 @@ services:
     volumes:
     - /var/run/:/host/var/run/
     - ./chaincode:/opt/gopath/src/chaincode    
-EOF 
+EOF
+
 
 docker stack deploy -c hyperledger-chaincode.yaml hyperledger-admin-api
