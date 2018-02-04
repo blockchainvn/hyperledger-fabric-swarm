@@ -4,7 +4,6 @@ if [[ -z $ORG ]];then
   echo "Please enter organization"
 fi
 
-
 MSP_PATH=../crypto-config/peerOrganizations/$ORG/users/Admin@${ORG}/msp
   
 # create Peer Admin
