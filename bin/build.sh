@@ -1,6 +1,20 @@
 BASE_DIR=$PWD
 
 if [[ -d $GOPATH ]];then
+
+  ARCH=`uname -s | grep Darwin`
+  if [ "$ARCH" == "Darwin" ]; then
+    if [ ! `command -v go` ]; then
+      brew install go
+    fi
+  else
+    if [ ! `command -v go` ]; then        
+      apt install golang-go -y
+    fi  
+    apt install libtool libltdl-dev -y
+  fi  
+
+  apt install libtool libltdl-dev
   mkdir -p /opt/gopath/src
   export GOPATH=/opt/gopath
   cd $GOPATH/src
