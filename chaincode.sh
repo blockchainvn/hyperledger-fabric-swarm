@@ -1,3 +1,10 @@
+
+ORG=$1
+if [[ -z $ORG ]];then
+  echo "Please enter organization"
+fi
+
+cat <<EOF | docker stack deploy -c -
 version: "3"
 networks:
   hyperledger-ov:
@@ -21,10 +28,11 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=chaincode
-      - CORE_PEER_ADDRESS=peer0.org1.qsoft.com:7051
+      - CORE_PEER_ADDRESS=peer0.${ORG}:7051
     
     working_dir: /opt/gopath/src/chaincode
     command: sleep 3600
     volumes:
     - /var/run/:/host/var/run/
     - ./chaincode:/opt/gopath/src/chaincode    
+EOF hyperledger-admin-api
