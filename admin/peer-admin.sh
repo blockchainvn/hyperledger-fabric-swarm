@@ -1,5 +1,11 @@
 
-MSP_PATH=/opt/share/crypto-config/peerOrganizations/org1-f-1/users/Admin@org1-f-1/msp
+ORG=$1
+if [[ -z $ORG ]];then
+  echo "Please enter organization"
+fi
+
+
+MSP_PATH=../crypto-config/peerOrganizations/$ORG/users/Admin@org1-f-1/msp
   
 # create Peer Admin
 PRIVATE_KEY=$(ls $MSP_PATH/keystore/*_sk | head -1)
