@@ -1,5 +1,11 @@
 # hyperledger_on_swarm
 
+* clone this git
+```
+  cd first-network
+  git clone https://github.com/tubackkhoa/hyperledger-swarm.git
+```
+
 # portainer
 ```sh
 docker run -d -p 9000:9000 --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /opt/portainer:/data portainer/portainer
@@ -92,11 +98,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
   ```
 
 ### Generate the artifacts
-* clone this git
-```
-  cd first-network
-  git clone https://github.com/ChoiSD/hyperledger_on_swarm.git
-```
+
 * copy config generator & crypto-config generating script
 ```
   cp hyperledger_on_swarm/generateArtifacts.sh $PWD

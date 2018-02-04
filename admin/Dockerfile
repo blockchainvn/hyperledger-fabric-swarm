@@ -1,6 +1,6 @@
 MAINTAINER tupt
 
-FROM node
+FROM node as build-env
 
 LABEL version="1.0"
 LABEL description="admin demo"
