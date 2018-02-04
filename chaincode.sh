@@ -4,7 +4,7 @@ if [[ -z $ORG ]];then
   echo "Please enter organization"
 fi
 
-cat <<EOF | docker stack deploy -c -
+cat <<EOF > hyperledger-chaincode.yaml
 version: "3"
 networks:
   hyperledger-ov:
@@ -35,4 +35,6 @@ services:
     volumes:
     - /var/run/:/host/var/run/
     - ./chaincode:/opt/gopath/src/chaincode    
-EOF hyperledger-admin-api
+EOF 
+
+docker stack deploy -c hyperledger-chaincode.yaml hyperledger-admin-api
