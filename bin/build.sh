@@ -1,5 +1,14 @@
 BASE_DIR=$PWD
 
+if [[ -d $GOPATH ]];then
+  mkdir -p /opt/gopath/src
+  export GOPATH=/opt/gopath
+  cd $GOPATH/src
+  mkdir -p github.com/hyperledger
+  cd github.com/hyperledger
+  git clone https://github.com/hyperledger/fabric.git
+fi
+
 cd ${GOPATH}/src/github.com/hyperledger/fabric/
 make configtxgen
 make cryptogen  
