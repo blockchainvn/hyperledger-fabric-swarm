@@ -1,5 +1,3 @@
-MAINTAINER tupt
-
 FROM node as build-env
 
 LABEL version="1.0"
