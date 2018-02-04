@@ -7,11 +7,11 @@ WORKING_PATH=$PWD
 if [[ -z $IMAGE_CHECK ]];then
   echo "Building image $IMAGE_NAME ..."
   echo
-  docker build -t $IMAGE_NAME .
+  docker build -t $IMAGE_NAME --target build-env .
 fi
 
 : ${NAMESPACE:="default"}
-: ${PORT:="8080"}
+: ${PORT:="8888"}
   
 
 # create template then you can run it normally
