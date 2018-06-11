@@ -191,7 +191,7 @@ docker stack deploy -c admin/api-server.yaml hyperledger-admin-api
 ```
   export CHANNEL_NAME=sdchannel
   export ORG=hottab.com
-  peer channel create -o orderer0.sdchoi.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer0.$ORG/msp/tlscacerts/tlsca.$ORG-cert.pem
+  peer channel create -o orderer0.${ORG}:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/$ORG/orderers/orderer0.${ORG}/msp/tlscacerts/tlsca.${ORG}-cert.pem
 ```
 * Join a channel
 ```
