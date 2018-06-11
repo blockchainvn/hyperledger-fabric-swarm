@@ -5,23 +5,22 @@ Profiles:
       Organizations:
       - Name: Org1MSP
         ID: Org1MSP
-        MSPDir: crypto-config/peerOrganizations/org1.qsoft.com/msp
+        MSPDir: crypto-config/peerOrganizations/org1.agiletech.vn/msp
         AnchorPeers:
-        - Host: peer0.org1.qsoft.com
+        - Host: peer0.org1.agiletech.vn
           Port: 7051
       - Name: Org2MSP
         ID: Org2MSP
-        MSPDir: crypto-config/peerOrganizations/org2.qsoft.com/msp
+        MSPDir: crypto-config/peerOrganizations/org2.agiletech.vn/msp
         AnchorPeers:
-        - Host: peer0.org2.qsoft.com
+        - Host: peer0.org2.agiletech.vn
           Port: 7051
   TwoOrgsOrdererGenesis:
     Orderer:
       OrdererType: kafka
       Addresses:
-      - orderer0.qsoft.com:7050
-      - orderer1.qsoft.com:7050
-      - orderer2.qsoft.com:7050
+      - orderer0.agiletech.vn:7050
+      - orderer1.agiletech.vn:7050
       BatchTimeout: 2s
       BatchSize:
         MaxMessageCount: 10
@@ -29,50 +28,49 @@ Profiles:
         PreferredMaxBytes: 524288
       Kafka:
         Brokers:
-        - kafka0.qsoft.com:9092
-        - kafka1.qsoft.com:9092
-        - kafka2.qsoft.com:9092
+        - kafka0.agiletech.vn:9092
+        - kafka1.agiletech.vn:9092
+        - kafka2.agiletech.vn:9092
       Organizations:
       - Name: OrdererOrg
         ID: OrdererMSP
-        MSPDir: crypto-config/ordererOrganizations/qsoft.com/msp
+        MSPDir: crypto-config/ordererOrganizations/agiletech.vn/msp
     Consortiums:
       SampleConsortium:
         Organizations:
         - Name: Org1MSP
           ID: Org1MSP
-          MSPDir: crypto-config/peerOrganizations/org1.qsoft.com/msp
+          MSPDir: crypto-config/peerOrganizations/org1.agiletech.vn/msp
           AnchorPeers:
-          - Host: peer0.org1.qsoft.com
+          - Host: peer0.org1.agiletech.vn
             Port: 7051
         - Name: Org2MSP
           ID: Org2MSP
-          MSPDir: crypto-config/peerOrganizations/org2.qsoft.com/msp
+          MSPDir: crypto-config/peerOrganizations/org2.agiletech.vn/msp
           AnchorPeers:
-          - Host: peer0.org2.qsoft.com
+          - Host: peer0.org2.agiletech.vn
             Port: 7051
 Organizations:
 - Name: OrdererOrg
   ID: OrdererMSP
-  MSPDir: crypto-config/ordererOrganizations/qsoft.com/msp
+  MSPDir: crypto-config/ordererOrganizations/agiletech.vn/msp
 - Name: Org1MSP
   ID: Org1MSP
-  MSPDir: crypto-config/peerOrganizations/org1.qsoft.com/msp
+  MSPDir: crypto-config/peerOrganizations/org1.agiletech.vn/msp
   AnchorPeers:
-  - Host: peer0.org1.qsoft.com
+  - Host: peer0.org1.agiletech.vn
     Port: 7051
 - Name: Org2MSP
   ID: Org2MSP
-  MSPDir: crypto-config/peerOrganizations/org2.qsoft.com/msp
+  MSPDir: crypto-config/peerOrganizations/org2.agiletech.vn/msp
   AnchorPeers:
-  - Host: peer0.org2.qsoft.com
+  - Host: peer0.org2.agiletech.vn
     Port: 7051
 Orderer:
   OrdererType: kafka
   Addresses:
-  - orderer0.qsoft.com:7050
-  - orderer1.qsoft.com:7050
-  - orderer2.qsoft.com:7050
+  - orderer0.agiletech.vn:7050
+  - orderer1.agiletech.vn:7050
   BatchTimeout: 2s
   BatchSize:
     MaxMessageCount: 10
@@ -80,10 +78,10 @@ Orderer:
     PreferredMaxBytes: 524288
   Kafka:
     Brokers:
-    - kafka0.qsoft.com:9092
-    - kafka1.qsoft.com:9092
-    - kafka2.qsoft.com:9092
+    - kafka0.agiletech.vn:9092
+    - kafka1.agiletech.vn:9092
+    - kafka2.agiletech.vn:9092
   Organizations:
   - Name: OrdererOrg
     ID: OrdererMSP
-    MSPDir: crypto-config/ordererOrganizations/qsoft.com/msp
+    MSPDir: crypto-config/ordererOrganizations/agiletech.vn/msp

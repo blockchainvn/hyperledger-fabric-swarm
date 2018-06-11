@@ -11,8 +11,8 @@ services:
         condition: on-failure
         delay: 5s
         max_attempts: 3
-    hostname: ca0.qsoft.com
-    image: hyperledger/fabric-ca:x86_64-1.0.2
+    hostname: ca0.agiletech.vn
+    image: hyperledger/fabric-ca:x86_64-1.1.0-preview
     networks:
       hyperledger-ov:
         aliases:
@@ -21,13 +21,13 @@ services:
     - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
     - FABRIC_CA_SERVER_CA_NAME=ca-org1
     - FABRIC_CA_SERVER_TLS_ENABLED=true
-    - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.qsoft.com-cert.pem
-    - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/5c3498d63bd6cb5e55394c1bf639b63ec5d47208b2c408bb829bd32f89b33c41_sk
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.qsoft.com-cert.pem
-      --ca.keyfile /etc/hyperledger/fabric-ca-server-config/5c3498d63bd6cb5e55394c1bf639b63ec5d47208b2c408bb829bd32f89b33c41_sk -b admin:adminpw
+    - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org1.agiletech.vn-cert.pem
+    - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/6fea2da26d7ec1cb94992ed10a2f579a0e646b6ccd46463076741db52f209e4b_sk
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.agiletech.vn-cert.pem
+      --ca.keyfile /etc/hyperledger/fabric-ca-server-config/6fea2da26d7ec1cb94992ed10a2f579a0e646b6ccd46463076741db52f209e4b_sk -b admin:adminpw
       -d'
     volumes:
-    - ./crypto-config/peerOrganizations/org1.qsoft.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    - ./crypto-config/peerOrganizations/org1.agiletech.vn/ca/:/etc/hyperledger/fabric-ca-server-config
   ca1:
     deploy:
       replicas: 1
@@ -35,8 +35,8 @@ services:
         condition: on-failure
         delay: 5s
         max_attempts: 3
-    hostname: ca1.qsoft.com
-    image: hyperledger/fabric-ca:x86_64-1.0.2
+    hostname: ca1.agiletech.vn
+    image: hyperledger/fabric-ca:x86_64-1.1.0-preview
     networks:
       hyperledger-ov:
         aliases:
@@ -45,10 +45,10 @@ services:
     - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
     - FABRIC_CA_SERVER_CA_NAME=ca-org2
     - FABRIC_CA_SERVER_TLS_ENABLED=true
-    - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.qsoft.com-cert.pem
+    - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.agiletech.vn-cert.pem
     - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.qsoft.com-cert.pem
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.agiletech.vn-cert.pem
       --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw
       -d'
     volumes:
-    - ./crypto-config/peerOrganizations/org2.qsoft.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    - ./crypto-config/peerOrganizations/org2.agiletech.vn/ca/:/etc/hyperledger/fabric-ca-server-config

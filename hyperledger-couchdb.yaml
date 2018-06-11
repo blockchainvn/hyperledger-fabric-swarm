@@ -11,8 +11,8 @@ services:
         condition: on-failure
         delay: 5s
         max_attempts: 3
-    hostname: couchdb0.qsoft.com
-    image: hyperledger/fabric-couchdb:x86_64-1.0.2
+    hostname: couchdb0.agiletech.vn
+    image: hyperledger/fabric-couchdb:x86_64-1.1.0-preview
     networks:
       hyperledger-ov:
         aliases:
@@ -24,8 +24,8 @@ services:
         condition: on-failure
         delay: 5s
         max_attempts: 3
-    hostname: couchdb1.qsoft.com
-    image: hyperledger/fabric-couchdb:x86_64-1.0.2
+    hostname: couchdb1.agiletech.vn
+    image: hyperledger/fabric-couchdb:x86_64-1.1.0-preview
     networks:
       hyperledger-ov:
         aliases:

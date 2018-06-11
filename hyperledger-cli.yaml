@@ -11,7 +11,7 @@ services:
         condition: on-failure
         delay: 5s
         max_attempts: 3
-    image: hyperledger/fabric-tools:x86_64-1.0.2
+    image: hyperledger/fabric-tools:x86_64-1.1.0-preview
     networks:
       hyperledger-ov:
         aliases:
@@ -22,18 +22,18 @@ services:
     - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
     - CORE_LOGGING_LEVEL=DEBUG
     - CORE_PEER_ID=cli
-    - CORE_PEER_ADDRESS=peer0.org1.qsoft.com:7051
+    - CORE_PEER_ADDRESS=peer0.org1.agiletech.vn:7051
     - CORE_PEER_LOCALMSPID=Org1MSP
     - CORE_PEER_TLS_ENABLED=true
-    - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.qsoft.com/peers/peer0.org1.qsoft.com/tls/server.crt
-    - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.qsoft.com/peers/peer0.org1.qsoft.com/tls/server.key
-    - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.qsoft.com/peers/peer0.org1.qsoft.com/tls/ca.crt
-    - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.qsoft.com/users/Admin@org1.qsoft.com/msp
+    - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.agiletech.vn/peers/peer0.org1.agiletech.vn/tls/server.crt
+    - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.agiletech.vn/peers/peer0.org1.agiletech.vn/tls/server.key
+    - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.agiletech.vn/peers/peer0.org1.agiletech.vn/tls/ca.crt
+    - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.agiletech.vn/users/Admin@org1.agiletech.vn/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: sleep 3600
     volumes:
     - /var/run/:/host/var/run/
-    - ./../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+    - ./chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
     - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
     - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
     - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts

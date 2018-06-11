@@ -1,212 +1,225 @@
 # hyperledger_on_swarm
 
 * clone this git
+
 ```
-  cd first-network
-  git clone https://github.com/tubackkhoa/hyperledger-swarm.git
+  cd hyperledger-fabric-swarm
+  git clone https://github.com/blockchainvn/hyperledger-fabric-swarm.git
 ```
 
 # portainer
-```sh
-docker run -d -p 9000:9000 --restart always -v /var/run/docker.sock:/var/run/docker.sock -v /opt/portainer:/data portainer/portainer
+
 ```
+  yarn portainer
+```
+
+Open url: http://localhost:9000
+[!potainer](docs_images/portainer.png)
 
 # build tools
-```sh
-cd bin 
-./build.sh
-```
 
-# build admin 
-```sh
-cd admin
-./build.sh
+```
+  yarn build-tools
 ```
 
 This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
-- Supported version : 1.0.0 GA and above (1.0.1 currently)
-* You can specify number of each component. Supported components are:
-  - Number of Organizations (CA will be one per a Organization)
-  - Number of Peer per a Organization
-  - Number of Orderer
-  - Number of Kafka
-  - Number of Zookeeper
-  - Domain name
-  
+
+* Supported version : 1.0.2 and above (1.1.0 currently)
+
+- You can specify number of each component. Supported components are:
+
+  * Number of Organizations (CA will be one per a Organization)
+  * Number of Peer per a Organization
+  * Number of Orderer
+  * Number of Kafka
+  * Number of Zookeeper
+  * Domain name
+
 ## Instructions
 
 ### Pre-reqs
-- 1 or more machines with Linux
-- Install Docker >= 1.13
+
+* 1 or more machines with Linux
+* Install Docker >= 1.13
 
 ### [Create Docker Swarm cluster](https://docs.docker.com/engine/swarm/swarm-tutorial/)
+
 * Create one or more master hosts and other worker hosts
-  - Open ports for Swarm. On ALL hosts, (eg, CentOS)
+  * Open ports for Swarm. On ALL hosts, (eg, CentOS)
+
 ```
+  # if run on local, no need
   firewall-cmd --permanent --zone=public --add-port=2377/tcp --add-port=7946/tcp --add-port=7946/udp --add-port=4789/udp
   firewall-cmd --reload
 ```
-    - I think opening swarm ports only is sufficient because all nodes communicates thru overlay network.
 
-  - on master host,
+* I think opening swarm ports only is sufficient because all nodes communicates thru overlay network.
+
+- on master host,
+
 ```
   docker swarm init
 ```
 
-  - You can see like below,
+* You can see like below,
+
 ```
   Swarm initialized: current node (dxn1zf6l61qsb1josjja83ngz) is now a manager.
 
   To add a worker to this swarm, run the following command:
 
-    docker swarm join \
-    --token SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c \
-    192.168.99.100:2377
+    docker swarm join --token SWMTKN-1-0q7mhbliu4lp7lehsavwzkv2di8214bvp7d29d33zxbbn6gm88-dz9bdw752l2296ni4ia2nsudk 192.168.65.3:2377
 
   To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
 ```
-   - Use last command to join worker host to Swarm cluster
-     eg, on worker hosts,
-```sh
-    docker swarm join \
-      --token SWMTKN-1-49nj1cmql0jkz5s954yi3oex3nedyz0fb0xx14ie39trti4wxv-8vxv8rssmk743ojnwacrr2e7c \
-      192.168.99.100:2377
+
+* Use last command to join worker host to Swarm cluster
+  eg, on worker hosts,
+
+```
+    docker swarm join --token SWMTKN-1-0q7mhbliu4lp7lehsavwzkv2di8214bvp7d29d33zxbbn6gm88-dz9bdw752l2296ni4ia2nsudk 192.168.65.3:2377
 ```
 
 ### Create overlay network
+
 * Create overlay network which will be used as path between hyperledger nodes
-  - on Master host,
-```sh
+  * on Master host,
+
+```
     docker network create --attachable --driver overlay --subnet=10.200.1.0/24 hyperledger-ov
 ```
 
 ### Get Hyperledger Fabric artifacts and binaries
-* As encryption keys and artifacts share same path, you need to put them on same location.
-   - In this case, the location is '/nfs-share' (I personally use NFS)
-   - For example,
-```sh
-    cd /nfs-share
-    git clone https://github.com/hyperledger/fabric-samples.git
-    cd fabric-samples
-    curl -sSL https://goo.gl/iX9dek | bash
-```
 
-* I recommend you get ccenv image on all host. Fabric does not pull the latest ccenv image for you.
-    so on ALL host,
-  ```
-    docker pull hyperledger/fabric-ccenv:x86_64-1.0.0
-  ```
+* As encryption keys and artifacts share same path, you need to put them on same location.
+  * In this case, the location is '/nfs-share' (I personally use NFS)
+  * For example,
+
+```
+  $ mount 1.2.3.4:/nfs-share $PWD
+  $ ls
+  channel-artifacts crypto-config
+```
 
 ### Generate the artifacts
 
-* copy config generator & crypto-config generating script
-```
-  cp hyperledger_on_swarm/generateArtifacts.sh $PWD
-  cp hyperledger_on_swarm/genConfig/genConfig $PWD
-```
 * generate config file for your own configuration. For example,
+
 ```
-  ./genConfig -domain sdchoi.com -Kafka 3 -Orderer 5 -Zookeeper 3 -Orgs 4 -Peer 4
+  yarn genConfig -domain agiletech.vn -Kafka 3 -Orderer 2 -Zookeeper 3 -Orgs 2 -Peer 1 -Tag :x86_64-1.1.0-preview
 ```
-  For information,
+
+For information,
+
 ```
-  ./genConfig -h
+  yarn genConfig -h > /dev/null
 ```
+
 * generate artifacts
+
 ```
-  ./generateArtifacts.sh -c <CHANNEL-NAME> -d <DOMAIN-NAME> -o <NUM-ORGS>
+  yarn genArtifacts -c <CHANNEL-NAME> -d <DOMAIN-NAME> -o <NUM-ORGS>
 ```
-  For example,
+
+For example,
+
 ```
-  ./generateArtifacts.sh -c sdchannel -d sdchoi.com -o 4
+  yarn genArtifacts -c mychannel -d agiletech.vn -o 2
 ```
-* share two directories (channel-artifacts, crypto-config) among all hosts with same path
+
+* share two directories (channel-artifacts, crypto-config) among all hosts with same path, let's assume at **1.2.3.4:/nfs-share**
 
 ### Deploy Hyperledger Fabric nodes
+
 * On Master host,
-  - If you choose to configure with multiple orderers,  
+  * If you choose to configure with multiple orderers,
 
-```sh
-  docker stack deploy -c hyperledger-zookeeper.yaml hyperledger-zk
-  docker stack deploy -c hyperledger-kafka.yaml hyperledger-kafka
-  docker stack deploy -c hyperledger-orderer.yaml hyperledger-orderer
-  docker stack deploy -c hyperledger-couchdb.yaml hyperledger-couchdb
-  docker stack deploy -c hyperledger-peer.yaml hyperledger-peer
-  docker stack deploy -c hyperledger-ca.yaml hyperledger-ca
-  docker stack deploy -c hyperledger-cli.yaml hyperledger-cli
+```
+  yarn start
 ```
 
-# deploy chaincode and admin
-```sh
-docker stack deploy -c hyperledger-chaincode.yaml hyperledger-chaincode
-docker stack deploy -c admin/api-server.yaml hyperledger-admin-api
+* If you choose to configure in 'solo' mode (without kafka, zookeeper)
+
+```
+  yarn start-solo
 ```
 
-  - If you choose to configure in 'solo' mode
-```
-  docker stack deploy -c hyperledger-orderer.yaml hyperledger-orderer
-  docker stack deploy -c hyperledger-couchdb.yaml hyperledger-couchdb
-  docker stack deploy -c hyperledger-peer.yaml hyperledger-peer
-  docker stack deploy -c hyperledger-ca.yaml hyperledger-ca
-  docker stack deploy -c hyperledger-cli.yaml hyperledger-cli
-```
-  - I recommend you to check services' status after every deploy.
+* I recommend you to check services' status after every deploy.
+
 ```
   docker service ls
 ```
-  - If something is wrong, check it, remove the stack, correct it and re-deploy.
-  - In case you want to check if network is OK or ports are opened on containers, you can use busybox. busybox has ping, telnet, etc.
+
+go to http://localhost:9000/#/networks/<network_id> and you can see
+[!network](docs_images/network.png)
+
+* If something is wrong, check it, remove the stack, correct it and re-deploy.
+* In case you want to check if network is OK or ports are opened on containers, you can use busybox. busybox has ping, telnet, etc.
+
 ```
   docker stack deploy -c busybox.yaml busybox
 ```
 
 ### Do the rest of [Getting Started of Hyperledger Fabric Documentation](https://hyperledger-fabric.readthedocs.io/en/latest/getting_started.html)
+
 * Create & Join channel, Install, Instantiate & Query chaincodes
-  - NOTE: environment variables & orderer's name should be corrected to work properly.
+  * NOTE: environment variables & orderer's name should be corrected to work properly.
 
 #### Examples
+
 * Generate Hyperledger Fabric config
+
 ```
-  ./genConfig -domain sdchoi.com -Kafka 3 -Orderer 2 -Zookeeper 3 -Orgs 2 -Peer 2
+  yarn genConfig -domain agiletech.vn -Kafka 3 -Orderer 2 -Zookeeper 3 -Orgs 2 -Peer 2
 ```
+
 * Generate artifacts
+
 ```
-  ./generateArtifacts.sh -c sdchannel -d sdchoi.com -o 2
+  yarn genArtifacts -c mychannel -d agiletech.vn -o 2
 ```
+
 * Deploy Hyperledger Fabric
+
 ```
-  docker stack deploy -c hyperledger-zookeeper.yaml hyperledger-zk
-  docker stack deploy -c hyperledger-kafka.yaml hyperledger-kafka
-  docker stack deploy -c hyperledger-orderer.yaml hyperledger-orderer
-  docker stack deploy -c hyperledger-couchdb.yaml hyperledger-couchdb
-  docker stack deploy -c hyperledger-peer.yaml hyperledger-peer
-  docker stack deploy -c hyperledger-ca.yaml hyperledger-ca
-  docker stack deploy -c hyperledger-cli.yaml hyperledger-cli
+  yarn start
 ```
+
 * Attach to cli container
+
 ```
   docker exec -it $(docker ps --format "table {{.ID}}" -f "label=com.docker.stack.namespace=hyperledger-cli" | tail -1) bash
 ```
+
 * Create a channel
+
 ```
-  export CHANNEL_NAME=sdchannel
-  export ORG=hottab.com
-  peer channel create -o orderer0.${ORG}:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/$ORG/orderers/orderer0.${ORG}/msp/tlscacerts/tlsca.${ORG}-cert.pem
+  export CHANNEL_NAME=mychannel
+  export ORG=agiletech.vn
+  peer channel create -o orderer0.${ORG}:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/$ORG/orderers/orderer0.${ORG}/msp/tlscacerts/tlsca.${ORG}-cert.pem
 ```
+
 * Join a channel
+
 ```
-  peer channel join -b sdchannel.block
+  peer channel join -b mychannel.block
   peer channel list
 ```
+
 * Install & Initiate Chaincode
+
 ```
-  peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02
-  peer chaincode instantiate -o orderer0.sdchoi.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer0.sdchoi.com/msp/tlscacerts/tlsca.sdchoi.com-cert.pem -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a", "100", "b","200"]}' -P "OR ('Org1MSP.member','Org2MSP.member')"
+  peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/sacc
+  peer chaincode instantiate -o orderer0.agiletech.vn:7050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/agiletech.vn/orderers/orderer0.agiletech.vn/msp/tlscacerts/tlsca.agiletech.vn-cert.pem -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["a", "100"]}'
 ```
+
+if success you must see new chaincode container:
+(!chaincode)[chaincode.png]
+
 * Query & Invoke Chaincode
+
 ```
   peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}'
-  peer chaincode invoke -o orderer1.sdchoi.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/sdchoi.com/orderers/orderer1.sdchoi.com/msp/tlscacerts/tlsca.sdchoi.com-cert.pem  -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}'
+  peer chaincode invoke -o orderer1.agiletech.vn:7050 --tls true --cafile /opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/agiletech.vn/orderers/orderer1.agiletech.vn/msp/tlscacerts/tlsca.agiletech.vn-cert.pem -C $CHANNEL_NAME -n mycc -c '{"Args":["set","a","10"]}'
   peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}'
-  peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","b"]}'
 ```
