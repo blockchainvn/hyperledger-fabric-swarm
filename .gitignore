@@ -1,2 +1,7 @@
 **/node_modules
 **/package-lock.json
+
+# these are the local files
+crypto-config
+channel-artifacts
+bin

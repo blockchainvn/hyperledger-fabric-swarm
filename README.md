@@ -14,7 +14,7 @@
 ```
 
 Open url: http://localhost:9000
-[!potainer](docs_images/portainer.png)
+![potainer](docs_images/portainer.png)
 
 # build tools
 
@@ -151,7 +151,7 @@ For example,
 ```
 
 go to http://localhost:9000/#/networks/<network_id> and you can see
-[!network](docs_images/network.png)
+![network](docs_images/network.png)
 
 * If something is wrong, check it, remove the stack, correct it and re-deploy.
 * In case you want to check if network is OK or ports are opened on containers, you can use busybox. busybox has ping, telnet, etc.
@@ -214,7 +214,7 @@ go to http://localhost:9000/#/networks/<network_id> and you can see
 ```
 
 if success you must see new chaincode container:
-(!chaincode)[chaincode.png]
+![chaincode](chaincode.png)
 
 * Query & Invoke Chaincode
 
