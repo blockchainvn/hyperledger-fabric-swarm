@@ -214,7 +214,7 @@ go to http://localhost:9000/#/networks/<network_id> and you can see
 ```
 
 if success you must see new chaincode container:
-![chaincode](chaincode.png)
+![chaincode](docs_images/chaincode.png)
 
 * Query & Invoke Chaincode
 
