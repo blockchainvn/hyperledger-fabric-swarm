@@ -184,7 +184,7 @@ go to http://localhost:9000/#/networks/<network_id> and you can see
 * Generate Hyperledger Fabric config
 
 ```
-  yarn genConfig -domain agiletech.vn -Kafka 3 -Orderer 2 -Zookeeper 3 -Orgs 2 -Peer 2
+  yarn genConfig -domain agiletech.vn -Kafka 3 -Orderer 2 -Zookeeper 3 -Orgs 2 -Peer 1 -Tag :x86_64-1.1.0-preview
 ```
 
 * Generate artifacts
