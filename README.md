@@ -20,6 +20,10 @@ Open url: http://localhost:9000
 
 # build tools
 
+_Require libltdl_  
+Ubuntu: `sudo apt install libltdl-dev`  
+Centos: `yum install libtool-ltdl-devel`
+
 ```
   yarn build-tools
 ```
