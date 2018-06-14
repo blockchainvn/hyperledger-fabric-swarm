@@ -62,6 +62,10 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 * I think opening swarm ports only is sufficient because all nodes communicates thru overlay network.
 
 - on master host,
+  If you can not run swarm mode, you must set --live-restore to false in /etc/docker/daemon.json  
+  For those who can’t find /etc/docker/daemon.json try /etc/sysconfig/docker
+  live-restore option is there:
+  OPTIONS=’–selinux-enabled --log-driver=journald --live-restore’
 
 ```
   docker swarm init
