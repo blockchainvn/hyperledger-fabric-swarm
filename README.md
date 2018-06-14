@@ -112,6 +112,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 * generate config file for your own configuration. For example,
 
 ```
+  # go get  gopkg.in/yaml.v2
   yarn genConfig -domain agiletech.vn -Kafka 3 -Orderer 2 -Zookeeper 3 -Orgs 2 -Peer 1 -Tag :x86_64-1.1.0-preview
 ```
 
@@ -124,6 +125,7 @@ For information,
 * generate artifacts
 
 ```
+  mkdir -p channel-artifacts
   yarn genArtifacts -c <CHANNEL-NAME> -d <DOMAIN-NAME> -o <NUM-ORGS>
 ```
 
