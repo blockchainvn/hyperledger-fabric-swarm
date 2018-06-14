@@ -1,6 +1,6 @@
 BASE_DIR=$PWD
 
-if [ -d "$GOPATH" ];then
+if [ ! -d "$GOPATH" ];then
 
   ARCH=`uname -s | grep Darwin`
   if [ "$ARCH" == "Darwin" ]; then
@@ -19,7 +19,7 @@ if [ -d "$GOPATH" ];then
   export GOPATH=/opt/gopath  
 fi
 
-if [ -d "$GOPATH/src/github.com/hyperledger" ];then
+if [ ! -d "$GOPATH/src/github.com/hyperledger" ];then
   cd $GOPATH/src
   mkdir -p github.com/hyperledger
   cd github.com/hyperledger
