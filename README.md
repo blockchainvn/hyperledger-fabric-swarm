@@ -47,7 +47,7 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 
 * 1 or more machines with Linux
 * Install Docker >= 1.13
-* Install [Golang](https://golang.org/doc/install)
+* Install [Golang](https://golang.org/doc/install) >= 1.9
 * Install [Nodejs](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable)
 
 ### [Create Docker Swarm cluster](https://docs.docker.com/engine/swarm/swarm-tutorial/)
@@ -131,13 +131,13 @@ For information,
 * generate artifacts
 
 ```
-  mkdir -p channel-artifacts
   yarn genArtifacts -c <CHANNEL-NAME> -d <DOMAIN-NAME> -o <NUM-ORGS>
 ```
 
 For example,
 
 ```
+  mkdir -p channel-artifacts
   yarn genArtifacts -c mychannel -d agiletech.vn -o 2
 ```
 
@@ -190,6 +190,7 @@ go to http://localhost:9000/#/networks/<network_id> and you can see
 * Generate artifacts
 
 ```
+  mkdir -p channel-artifacts
   yarn genArtifacts -c mychannel -d agiletech.vn -o 2
 ```
 
