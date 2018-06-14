@@ -9,7 +9,7 @@
     "start": "./run.sh",
     "start-solo": "./run-solo.sh",
     "stop": "./stop.sh",
-    "build-tools": "cd bin && ./build.sh",
+    "build-tools": "./build.sh",
     "genConfig": "go run genConfig/*.go",
     "genArtifacts": "./generateArtifacts.sh",
     "portainer":
