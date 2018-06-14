@@ -19,7 +19,7 @@ if [[ -d $GOPATH ]];then
   export GOPATH=/opt/gopath  
 fi
 
-if [[ -d $GOPATH/src/github.com/hyperledger ]]
+if [[ -d $GOPATH/src/github.com/hyperledger ]];then
   cd $GOPATH/src
   mkdir -p github.com/hyperledger
   cd github.com/hyperledger
