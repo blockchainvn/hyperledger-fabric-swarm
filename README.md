@@ -47,6 +47,8 @@ This repository is for deploying Hyperledger Fabric on Swarm cluster easily.
 
 * 1 or more machines with Linux
 * Install Docker >= 1.13
+* Install [Golang](https://golang.org/doc/install)
+* Install [Nodejs](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable)
 
 ### [Create Docker Swarm cluster](https://docs.docker.com/engine/swarm/swarm-tutorial/)
 
