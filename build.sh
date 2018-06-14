@@ -34,5 +34,8 @@ echo "===================== Crypto tools built successfully ====================
 echo 
 echo "Copying to bin folder of network..."
 echo
+
+# make sure folder exists
+mkdir -p $BASE_DIR/bin
 cp ./build/bin/configtxgen $BASE_DIR/bin
 cp ./build/bin/cryptogen $BASE_DIR/bin
