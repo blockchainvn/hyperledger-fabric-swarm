@@ -1,5 +1,7 @@
 # hyperledger_on_swarm
 
+![swarm_mode](swarm-diagram.png)
+
 * clone this git
 
 ```
